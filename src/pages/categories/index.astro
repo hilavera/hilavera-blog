@@ -1,0 +1,87 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { getCollection } from 'astro:content';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+
+const posts = await getCollection('blog');
+const categoryCounts = posts.reduce<Record<string, number>>((counts, post) => {
+	counts[post.data.category] = (counts[post.data.category] ?? 0) + 1;
+	return counts;
+}, {});
+const tagCounts = posts.reduce<Record<string, number>>((counts, post) => {
+	for (const tag of post.data.tags) {
+		counts[tag] = (counts[tag] ?? 0) + 1;
+	}
+	return counts;
+}, {});
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={`分类 - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+		<style>
+			main {
+				width: 840px;
+			}
+			.group {
+				border-top: 1px solid rgb(var(--gray-light));
+				margin-top: 2em;
+				padding-top: 2em;
+			}
+			.term-list {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.75em;
+				list-style: none;
+				margin: 0;
+				padding: 0;
+			}
+			.term {
+				border: 1px solid rgb(var(--gray-light));
+				border-radius: 999px;
+				padding: 0.25em 0.75em;
+			}
+			.count {
+				color: rgb(var(--gray));
+				font-size: 0.85em;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>分类与标签</h1>
+			<p>分类用于区分文章的大方向，标签用于标记更具体的主题。</p>
+
+			<section class="group">
+				<h2>分类</h2>
+				<ul class="term-list">
+					{
+						Object.entries(categoryCounts).map(([category, count]) => (
+							<li class="term">
+								{category} <span class="count">{count} 篇</span>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+
+			<section class="group">
+				<h2>标签</h2>
+				<ul class="term-list">
+					{
+						Object.entries(tagCounts).map(([tag, count]) => (
+							<li class="term">
+								{tag} <span class="count">{count} 篇</span>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

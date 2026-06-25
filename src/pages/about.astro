@@ -1,0 +1,23 @@
+---
+import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
+import Layout from '../layouts/BlogPost.astro';
+---
+
+<Layout
+	title="关于这个博客"
+	description="这个博客用来记录技术、生活、阅读和长期想法。"
+	pubDate={new Date('2026-06-25')}
+	heroImage={AboutHeroImage}
+>
+	<p>
+		这里是一个综合性个人博客。它不是只服务于某一个主题，而是用来保存那些值得回看的内容：技术问题、项目经验、生活观察、阅读笔记和阶段复盘。
+	</p>
+
+	<p>
+		第一阶段目标很简单：让博客能稳定写、稳定预览、稳定发布。功能先保持克制，等内容积累起来，再继续添加搜索、评论、访问统计和自定义域名。
+	</p>
+
+	<p>
+		如果以后想新增文章，只需要在 <code>src/content/blog/</code> 里新建一个 Markdown 文件，然后填写标题、简介、日期、分类和标签。
+	</p>
+</Layout>
