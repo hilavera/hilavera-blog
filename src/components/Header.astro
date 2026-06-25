@@ -19,8 +19,9 @@ import { withBase } from '../consts';
 	header {
 		margin: 0;
 		padding: 0 1em;
-		background: white;
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
+		background: rgba(2, 6, 23, 92%);
+		border-bottom: 1px solid rgba(125, 211, 252, 16%);
+		box-shadow: 0 8px 32px rgba(2, 6, 23, 28%);
 	}
 	h2 {
 		margin: 0;
@@ -39,13 +40,17 @@ import { withBase } from '../consts';
 	}
 	nav a {
 		padding: 1em 0.5em;
-		color: var(--black);
+		color: #cbd5e1;
 		border-bottom: 4px solid transparent;
 		text-decoration: none;
 	}
 	nav a.active {
 		text-decoration: none;
-		border-bottom-color: var(--accent);
+		border-bottom-color: #22d3ee;
+		color: #f8fafc;
+	}
+	nav a:hover {
+		color: #67e8f9;
 	}
 	.internal-links {
 		display: flex;

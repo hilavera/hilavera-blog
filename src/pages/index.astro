@@ -6,11 +6,30 @@ import Header from '../components/Header.astro';
 import { getCollection } from 'astro:content';
 import { SITE_DESCRIPTION, SITE_TITLE, withBase } from '../consts';
 
+const profileName = 'hilavera';
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 const recentPosts = posts.slice(0, 3);
 const categories = Array.from(new Set(posts.map((post) => post.data.category)));
+const categoryCounts = categories.map((category) => ({
+	category,
+	count: posts.filter((post) => post.data.category === category).length,
+}));
+const allTags = Array.from(new Set(posts.flatMap((post) => post.data.tags))).slice(0, 8);
+
+const navItems = [
+	{ id: 'home', label: '主页', summary: '开发者状态' },
+	{ id: 'posts', label: '文章', summary: '发布记录' },
+	{ id: 'categories', label: '分类', summary: '知识模块' },
+	{ id: 'about', label: '关于', summary: '学习路线' },
+];
+
+const statusItems = [
+	{ label: 'NOW', value: 'Astro + GitHub Pages' },
+	{ label: 'LEARNING', value: 'JavaScript / CSS / Markdown' },
+	{ label: 'NEXT', value: 'TypeScript 基础和组件拆分' },
+];
 ---
 
 <!doctype html>
@@ -18,134 +37,538 @@ const categories = Array.from(new Set(posts.map((post) => post.data.category)));
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
-			main {
-				width: 960px;
+			body {
+				background:
+					radial-gradient(circle at 12% 0%, rgba(34, 211, 238, 18%), transparent 28rem),
+					radial-gradient(circle at 88% 8%, rgba(20, 184, 166, 18%), transparent 30rem),
+					linear-gradient(180deg, #07111f 0%, #0b1220 48%, #111827 100%);
+				color: #d8e8f8;
 			}
-			.hero {
-				padding: 3em 0 2em;
+			main.space-home {
+				width: min(1120px, calc(100% - 2em));
+				max-width: calc(100% - 2em);
+				padding: 2em 0 4em;
 			}
-			.hero p {
-				max-width: 680px;
-				font-size: 1.1em;
+			.tech-shell {
+				position: relative;
 			}
-			.actions {
+			.profile-hero {
+				background:
+					linear-gradient(135deg, rgba(15, 23, 42, 95%) 0%, rgba(12, 74, 110, 82%) 58%, rgba(6, 78, 59, 72%) 100%),
+					linear-gradient(90deg, rgba(34, 211, 238, 28%), rgba(20, 184, 166, 12%));
+				border: 1px solid rgba(125, 211, 252, 24%);
+				border-radius: 8px;
+				box-shadow: 0 20px 60px rgba(8, 47, 73, 28%);
+				margin-bottom: 1.25em;
+				overflow: hidden;
+				position: relative;
+			}
+			.profile-hero::before {
+				background-image:
+					linear-gradient(rgba(125, 211, 252, 10%) 1px, transparent 1px),
+					linear-gradient(90deg, rgba(125, 211, 252, 10%) 1px, transparent 1px);
+				background-size: 42px 42px;
+				content: '';
+				inset: 0;
+				opacity: 0.42;
+				position: absolute;
+			}
+			.profile-cover {
+				min-height: 240px;
+				padding: 2em;
+				position: relative;
+				z-index: 1;
+			}
+			.profile-cover::after {
+				background: linear-gradient(90deg, #22d3ee, #14b8a6, transparent);
+				bottom: 0;
+				content: '';
+				height: 3px;
+				left: 0;
+				position: absolute;
+				right: 0;
+			}
+			.profile-kicker,
+			.code-line {
+				align-items: center;
+				color: #67e8f9;
+				display: inline-flex;
+				font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+				font-size: 0.82rem;
+				font-weight: 700;
+				gap: 0.45rem;
+				letter-spacing: 0.06em;
+				margin: 0 0 0.7rem;
+				text-transform: uppercase;
+			}
+			.signal-dot {
+				background: #22c55e;
+				border-radius: 999px;
+				box-shadow: 0 0 18px rgba(34, 197, 94, 90%);
+				display: inline-block;
+				height: 0.55rem;
+				width: 0.55rem;
+			}
+			.profile-name {
+				color: #f8fafc;
+				font-size: 3.35rem;
+				letter-spacing: 0;
+				margin-bottom: 0.25rem;
+			}
+			.profile-description {
+				color: #cbd5e1;
+				max-width: 720px;
+				margin: 0;
+			}
+			.profile-stats,
+			.status-row {
 				display: flex;
 				flex-wrap: wrap;
 				gap: 0.75em;
-				margin-top: 1.5em;
+				margin: 1.4em 0 0;
 			}
-			.button {
-				background: var(--accent);
-				border: 1px solid var(--accent);
+			.profile-stats div,
+			.status-chip {
+				background: rgba(15, 23, 42, 72%);
+				border: 1px solid rgba(125, 211, 252, 22%);
 				border-radius: 8px;
-				color: white;
-				display: inline-block;
+				box-shadow: inset 0 1px 0 rgba(255, 255, 255, 8%);
+				min-width: 110px;
+				padding: 0.55em 0.75em;
+			}
+			.profile-stats dt,
+			.status-chip span {
+				color: #67e8f9;
+				font-size: 0.72rem;
 				font-weight: 700;
-				padding: 0.55em 0.9em;
-				text-decoration: none;
+				letter-spacing: 0.08em;
 			}
-			.button.secondary {
-				background: white;
-				color: var(--accent);
+			.profile-stats dd,
+			.status-chip strong {
+				color: #f8fafc;
+				display: block;
+				font-size: 1rem;
+				font-weight: 700;
+				margin: 0.05rem 0 0;
 			}
-			.section-title {
-				align-items: baseline;
-				border-top: 1px solid rgb(var(--gray-light));
+			.space-layout {
+				align-items: start;
+				display: grid;
+				gap: 1.25em;
+				grid-template-columns: 220px minmax(0, 1fr);
+			}
+			.space-sidebar,
+			.space-panel {
+				background: rgba(15, 23, 42, 88%);
+				border: 1px solid rgba(125, 211, 252, 18%);
+				box-shadow: 0 16px 50px rgba(2, 6, 23, 32%);
+				backdrop-filter: blur(14px);
+			}
+			.space-sidebar {
+				border-radius: 8px;
+				display: grid;
+				gap: 0.4em;
+				padding: 0.65em;
+				position: sticky;
+				top: 1em;
+			}
+			.space-tab {
+				background: transparent;
+				border: 1px solid transparent;
+				border-radius: 8px;
+				color: #cbd5e1;
+				cursor: pointer;
+				display: grid;
+				font: inherit;
+				gap: 0.1em;
+				padding: 0.65em 0.75em;
+				text-align: left;
+				width: 100%;
+			}
+			.space-tab:hover,
+			.space-tab.is-active {
+				background: rgba(8, 145, 178, 18%);
+				border-color: rgba(34, 211, 238, 28%);
+				color: #f8fafc;
+			}
+			.space-tab span {
+				font-weight: 700;
+				line-height: 1.2;
+			}
+			.space-tab small {
+				color: #94a3b8;
+				font-size: 0.75rem;
+				line-height: 1.3;
+			}
+			.space-content {
+				min-width: 0;
+			}
+			.space-panel {
+				border-radius: 8px;
+				min-height: 420px;
+				padding: 1.4em;
+			}
+			.space-panel[hidden] {
+				display: none;
+			}
+			.panel-heading {
+				align-items: start;
+				border-bottom: 1px solid rgba(125, 211, 252, 16%);
 				display: flex;
+				gap: 1em;
 				justify-content: space-between;
-				margin-top: 2em;
-				padding-top: 2em;
+				margin-bottom: 1.1em;
+				padding-bottom: 0.75em;
 			}
-			.post-list,
-			.category-list {
+			.panel-heading h2 {
+				color: #f8fafc;
+				font-size: 1.7rem;
+			}
+			.panel-heading p,
+			.feature-item p,
+			.post-item p,
+			.about-body p {
+				color: #cbd5e1;
+				margin: 0;
+			}
+			.panel-link,
+			.post-item a,
+			.category-pill {
+				color: #67e8f9;
+			}
+			.panel-link {
+				font-size: 0.9rem;
+				font-weight: 700;
+				white-space: nowrap;
+			}
+			.feature-grid {
+				display: grid;
+				gap: 0.8em;
+				grid-template-columns: repeat(3, minmax(0, 1fr));
+				margin-bottom: 1.2em;
+			}
+			.feature-item,
+			.post-item {
+				background: rgba(2, 6, 23, 32%);
+				border: 1px solid rgba(125, 211, 252, 16%);
+				border-radius: 8px;
+				padding: 0.85em;
+			}
+			.feature-item h3,
+			.post-item h3 {
+				color: #f8fafc;
+				font-size: 1.1rem;
+				margin-bottom: 0.35rem;
+			}
+			.post-list {
+				display: grid;
+				gap: 0.8em;
 				list-style: none;
 				margin: 0;
 				padding: 0;
 			}
-			.post-list {
+			.post-item a {
+				text-decoration: none;
+			}
+			.post-item a:hover {
+				color: #a7f3d0;
+			}
+			.post-meta {
+				color: #94a3b8;
+				font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+				font-size: 0.78rem;
+				margin: 0 0 0.2rem;
+			}
+			.category-grid,
+			.tag-list {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.55em;
+				list-style: none;
+				margin: 0;
+				padding: 0;
+			}
+			.category-pill,
+			.tag-pill {
+				background: rgba(8, 47, 73, 36%);
+				border: 1px solid rgba(125, 211, 252, 18%);
+				border-radius: 999px;
+				display: inline-flex;
+				gap: 0.4em;
+				padding: 0.25em 0.75em;
+				text-decoration: none;
+			}
+			.category-pill strong {
+				color: #f8fafc;
+			}
+			.category-pill span,
+			.tag-pill {
+				color: #bae6fd;
+				font-size: 0.85rem;
+			}
+			.about-body {
 				display: grid;
 				gap: 1em;
 			}
-			.post-card {
-				border: 1px solid rgb(var(--gray-light));
-				border-radius: 8px;
-				padding: 1em;
-			}
-			.post-card h3 {
-				font-size: 1.25em;
-			}
-			.post-card a {
-				color: rgb(var(--black));
-				text-decoration: none;
-			}
-			.post-card a:hover {
-				color: var(--accent);
-			}
-			.post-meta {
-				color: rgb(var(--gray));
-				font-size: 0.85em;
-				margin: 0;
-			}
-			.category-list {
+			.about-actions {
 				display: flex;
 				flex-wrap: wrap;
-				gap: 0.5em;
+				gap: 0.75em;
 			}
-			.category-list li {
-				border: 1px solid rgb(var(--gray-light));
-				border-radius: 999px;
-				padding: 0.15em 0.7em;
+			.button {
+				background: linear-gradient(135deg, #0891b2, #14b8a6);
+				border: 1px solid rgba(125, 211, 252, 36%);
+				border-radius: 8px;
+				color: white;
+				display: inline-block;
+				font-weight: 700;
+				padding: 0.5em 0.85em;
+				text-decoration: none;
 			}
-			@media (max-width: 720px) {
-				.section-title {
-					align-items: flex-start;
-					flex-direction: column;
+			.button.secondary {
+				background: rgba(15, 23, 42, 80%);
+				color: #67e8f9;
+			}
+			.empty-state {
+				color: #94a3b8;
+			}
+			@media (max-width: 820px) {
+				main.space-home {
+					padding-top: 1em;
+				}
+				.profile-cover {
+					min-height: 190px;
+					padding: 1.2em;
+				}
+				.profile-name {
+					font-size: 2.3rem;
+				}
+				.space-layout {
+					grid-template-columns: 1fr;
+				}
+				.space-sidebar {
+					position: static;
+				}
+				.feature-grid {
+					grid-template-columns: 1fr;
+				}
+				.panel-heading {
+					display: block;
+				}
+				.panel-link {
+					display: inline-block;
+					margin-top: 0.4em;
 				}
 			}
 		</style>
 	</head>
 	<body>
 		<Header />
-		<main class="home">
-			<section class="hero">
-				<h1>把技术、生活和阅读都认真记录下来。</h1>
-				<p>{SITE_DESCRIPTION}</p>
-				<div class="actions">
-					<a class="button" href={withBase('/blog/')}>查看文章</a>
-					<a class="button secondary" href={withBase('/about/')}>关于这个博客</a>
+		<main class="space-home tech-shell" data-space-home>
+			<section class="profile-hero" aria-labelledby="space-title">
+				<div class="profile-cover">
+					<p class="profile-kicker"><span class="signal-dot" aria-hidden="true"></span>entry developer online</p>
+					<h1 id="space-title" class="profile-name">{profileName}</h1>
+					<p class="profile-description">{SITE_DESCRIPTION}</p>
+					<p class="code-line">~/blog $ write --learn --build --ship</p>
+					<dl class="profile-stats" aria-label="博客统计">
+						<div>
+							<dt>文章</dt>
+							<dd>{posts.length}</dd>
+						</div>
+						<div>
+							<dt>分类</dt>
+							<dd>{categories.length}</dd>
+						</div>
+						<div>
+							<dt>阶段</dt>
+							<dd>入门开发者</dd>
+						</div>
+					</dl>
+					<div class="status-row" aria-label="当前学习状态">
+						{
+							statusItems.map((item) => (
+								<div class="status-chip">
+									<span>{item.label}</span>
+									<strong>{item.value}</strong>
+								</div>
+							))
+						}
+					</div>
 				</div>
 			</section>
 
-			<section>
-				<div class="section-title">
-					<h2>最近文章</h2>
-					<a href={withBase('/blog/')}>全部文章</a>
-				</div>
-				<ul class="post-list">
+			<section class="space-layout" aria-label="博客空间内容">
+				<nav class="space-sidebar" aria-label="空间导航" role="tablist">
 					{
-						recentPosts.map((post) => (
-							<li class="post-card">
-								<p class="post-meta">
-									{post.data.category} / <FormattedDate date={post.data.pubDate} />
-								</p>
-								<h3><a href={withBase(`/blog/${post.id}/`)}>{post.data.title}</a></h3>
-								<p>{post.data.description}</p>
-							</li>
+						navItems.map((item, index) => (
+							<button
+								class={`space-tab${index === 0 ? ' is-active' : ''}`}
+								type="button"
+								role="tab"
+								aria-controls={`panel-${item.id}`}
+								aria-selected={index === 0 ? 'true' : 'false'}
+								data-panel-target={item.id}
+							>
+								<span>{item.label}</span>
+								<small>{item.summary}</small>
+							</button>
 						))
 					}
-				</ul>
-			</section>
+				</nav>
 
-			<section>
-				<div class="section-title">
-					<h2>分类</h2>
-					<a href={withBase('/categories/')}>查看标签</a>
+				<div class="space-content">
+					<article class="space-panel is-active" id="panel-home" role="tabpanel" data-panel="home">
+						<div class="panel-heading">
+							<div>
+								<h2>入门开发者空间</h2>
+								<p>记录从“能跑起来”到“能讲清楚”的每一次练习、部署和复盘。</p>
+							</div>
+							<a class="panel-link" href={withBase('/blog/')}>查看全部文章</a>
+						</div>
+						<div class="feature-grid">
+							<div class="feature-item">
+								<h3>学习路线</h3>
+								<p>把 HTML、CSS、JavaScript、Astro 和 Git 的学习顺序拆成能执行的小任务。</p>
+							</div>
+							<div class="feature-item">
+								<h3>项目复盘</h3>
+								<p>每做完一个页面或功能，就记录目标、实现、问题和下一步改进。</p>
+							</div>
+							<div class="feature-item">
+								<h3>工具配置</h3>
+								<p>记录 VS Code、GitHub、Chrome 调试和部署配置，方便以后快速复用。</p>
+							</div>
+						</div>
+						<ul class="post-list">
+							{
+								recentPosts.map((post) => (
+									<li class="post-item">
+										<p class="post-meta">
+											{post.data.category} / <FormattedDate date={post.data.pubDate} />
+										</p>
+										<h3><a href={withBase(`/blog/${post.id}/`)}>{post.data.title}</a></h3>
+										<p>{post.data.description}</p>
+									</li>
+								))
+							}
+						</ul>
+					</article>
+
+					<article class="space-panel" id="panel-posts" role="tabpanel" data-panel="posts" hidden>
+						<div class="panel-heading">
+							<div>
+								<h2>发布内容</h2>
+								<p>文章按时间排序，主要是开发日志、踩坑记录、学习笔记和工具配置。</p>
+							</div>
+							<a class="panel-link" href={withBase('/blog/')}>进入文章页</a>
+						</div>
+						{
+							posts.length > 0 ? (
+								<ul class="post-list">
+									{
+										posts.map((post) => (
+											<li class="post-item">
+												<p class="post-meta">
+													{post.data.category} / <FormattedDate date={post.data.pubDate} />
+												</p>
+												<h3><a href={withBase(`/blog/${post.id}/`)}>{post.data.title}</a></h3>
+												<p>{post.data.description}</p>
+											</li>
+										))
+									}
+								</ul>
+							) : (
+								<p class="empty-state">还没有发布文章。</p>
+							)
+						}
+					</article>
+
+					<article class="space-panel" id="panel-categories" role="tabpanel" data-panel="categories" hidden>
+						<div class="panel-heading">
+							<div>
+								<h2>知识模块</h2>
+								<p>分类对应学习和发布方向，帮助我回看每个阶段主要练了什么。</p>
+							</div>
+							<a class="panel-link" href={withBase('/categories/')}>查看分类页</a>
+						</div>
+						<ul class="category-grid">
+							{
+								categoryCounts.map(({ category, count }) => (
+									<li>
+										<a class="category-pill" href={withBase('/categories/')}>
+											<strong>{category}</strong>
+											<span>{count} 篇</span>
+										</a>
+									</li>
+								))
+							}
+						</ul>
+						{
+							allTags.length > 0 && (
+								<>
+									<h3>常用标签</h3>
+									<ul class="tag-list">
+										{allTags.map((tag) => <li class="tag-pill">{tag}</li>)}
+									</ul>
+								</>
+							)
+						}
+					</article>
+
+					<article class="space-panel" id="panel-about" role="tabpanel" data-panel="about" hidden>
+						<div class="panel-heading">
+							<div>
+								<h2>关于这个空间</h2>
+								<p>这是一个入门开发者的公开学习仓库，用博客形式保存过程。</p>
+							</div>
+							<a class="panel-link" href={withBase('/about/')}>完整介绍</a>
+						</div>
+						<div class="about-body">
+							<p>
+								我会把每次学习、调试、部署和优化写成能复盘的记录。内容不追求“很高级”，
+								但要尽量真实：问题是什么、怎么定位、最后怎么解决、下次如何少走弯路。
+							</p>
+							<div class="about-actions">
+								<a class="button" href={withBase('/blog/')}>阅读开发日志</a>
+								<a class="button secondary" href={withBase('/about/')}>了解学习路线</a>
+							</div>
+						</div>
+					</article>
 				</div>
-				<ul class="category-list">
-					{categories.map((category) => <li>{category}</li>)}
-				</ul>
 			</section>
 		</main>
 		<Footer />
+		<script is:inline>
+			const tabs = Array.from(document.querySelectorAll('[data-panel-target]'));
+			const panels = Array.from(document.querySelectorAll('[data-panel]'));
+
+			function showPanel(panelId) {
+				tabs.forEach((tab) => {
+					const isActive = tab.dataset.panelTarget === panelId;
+					tab.classList.toggle('is-active', isActive);
+					tab.setAttribute('aria-selected', String(isActive));
+				});
+
+				panels.forEach((panel) => {
+					const isActive = panel.dataset.panel === panelId;
+					panel.classList.toggle('is-active', isActive);
+					panel.toggleAttribute('hidden', !isActive);
+				});
+
+				if (window.history.replaceState) {
+					window.history.replaceState(null, '', `#${panelId}`);
+				}
+			}
+
+			tabs.forEach((tab) => {
+				tab.addEventListener('click', () => showPanel(tab.dataset.panelTarget));
+			});
+
+			const initialPanel = window.location.hash.replace('#', '');
+			if (tabs.some((tab) => tab.dataset.panelTarget === initialPanel)) {
+				showPanel(initialPanel);
+			}
+		</script>
 	</body>
 </html>

@@ -1,24 +1,33 @@
 ---
-title: '用 Astro 搭建博客的完整流程'
-description: '从零开始用 Astro + GitHub Pages 搭建个人博客，记录每一步。'
+title: '入门开发者：我如何把 Astro 博客发布到 GitHub Pages'
+description: '从本地项目到线上地址，记录第一次把个人博客部署成功的完整过程。'
 pubDate: '2026-06-25'
-category: '技术'
-tags: ['Astro', 'GitHub Pages', '博客', '教程']
+category: '项目复盘'
+tags: ['入门开发者', 'Astro', 'GitHub Pages', '部署']
 heroImage: '../../assets/blog-placeholder-5.jpg'
 ---
 
-这篇记录我用 Astro 搭建博客的完整过程，包括踩过的坑。
+这是我作为入门开发者完成的第一个完整发布流程：本地创建 Astro 博客，把代码推到 GitHub，再通过 GitHub Pages 自动发布。
 
-## 为什么选 Astro
+## 目标
 
-之前也考虑过 Hugo、Hexo、Next.js，最后选了 Astro，原因很简单：
+这次不是只看教程，而是把一个能访问的页面真正发出去。最终结果需要满足三件事：
 
-- **速度快** — 默认生成纯静态 HTML，不带 JavaScript
-- **Markdown 友好** — 原生支持 Markdown 和 MDX
-- **模板灵活** — 用 `.astro` 文件写组件，学习成本低
-- **部署简单** — 配合 GitHub Pages 和 Actions，push 就自动部署
+- 本地能运行博客
+- GitHub 仓库里有完整代码
+- 线上地址能打开页面
 
-## 初始化项目
+## 我用到的工具
+
+- **Astro**：生成静态博客
+- **GitHub**：保存代码
+- **GitHub Pages**：托管网站
+- **GitHub Actions**：每次推送后自动构建和发布
+- **Markdown**：写文章内容
+
+## 实际步骤
+
+### 1. 创建项目
 
 ```bash
 npm create astro@latest my-blog
@@ -26,141 +35,44 @@ cd my-blog
 npm install
 ```
 
-选择模板时选「Blog」，会自带文章列表、分类、RSS 等功能。
+我选择了博客模板，因为它自带文章列表、文章详情、RSS 和基本样式。
 
-## 项目结构
+### 2. 配置仓库路径
 
-```
-my-blog/
-├── src/
-│   ├── content/
-│   │   └── blog/          # 文章放这里
-│   │       ├── hello.md
-│   │       └── post-2.md
-│   ├── pages/
-│   │   ├── index.astro    # 首页
-│   │   ├── about.astro    # 关于页
-│   │   └── blog/
-│   │       ├── index.astro      # 文章列表
-│   │       └── [...slug].astro  # 文章详情
-│   ├── components/        # 组件
-│   ├── layouts/           # 布局模板
-│   └── styles/            # 样式
-├── public/                # 静态资源
-├── astro.config.mjs       # 配置文件
-└── package.json
+我的网站不是部署在根域名，而是部署在：
+
+```text
+https://hilavera.github.io/hilavera-blog/
 ```
 
-## 配置 GitHub Pages
+所以 `astro.config.mjs` 里需要配置 `site` 和 `base`。这一步很关键，如果漏了，页面里的 CSS、图片和链接就容易 404。
 
-### 1. 修改 astro.config.mjs
+### 3. 配置自动部署
 
-如果仓库名不是 `username.github.io`，需要设置 `base`：
+我在 `.github/workflows/deploy.yml` 里配置 GitHub Actions。核心流程是：
 
-```js
-import { defineConfig } from 'astro/config';
+1. 拉取代码
+2. 安装依赖
+3. 执行 `npm run build`
+4. 上传 `dist`
+5. 发布到 GitHub Pages
 
-export default defineConfig({
-  site: 'https://hilavera.github.io',
-  base: '/hilavera-blog',
-});
-```
+## 踩坑记录
 
-### 2. 创建 GitHub Actions 部署配置
+### 路径不是 `/`
 
-在 `.github/workflows/deploy.yml`：
+刚开始我以为所有链接都可以直接写 `/blog/`，后来发现部署到子路径时会错。解决办法是写一个 `withBase()` 方法，统一给站内链接补上 base 路径。
 
-```yaml
-name: Deploy to GitHub Pages
+### 构建成功不等于页面正常
 
-on:
-  push:
-    branches: [main]
+`npm run build` 成功只能说明项目能生成静态文件，不代表线上路径一定对。所以我每次发布后都会打开真实网址检查。
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+### 文章图片路径要写准
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - run: npm ci
-      - run: npm run build
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
+Markdown frontmatter 里的 `heroImage` 指向 `src/assets`，路径写错会直接构建失败。这个错误反而有帮助，因为它能在发布前暴露问题。
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
-```
+## 这次学到什么
 
-### 3. 在 GitHub 仓库设置中开启 Pages
+我对“发布一个网站”有了更清楚的理解：写代码只是其中一部分，路径、构建、仓库、部署配置也都属于开发工作。
 
-Settings → Pages → Source 选择「GitHub Actions」。
-
-## 配置路径注意事项
-
-设置了 `base` 之后，所有站内链接都需要加上 base 路径。可以用一个工具函数：
-
-```ts
-// src/consts.ts
-export const BASE_PATH = import.meta.env.BASE_URL.replace(/\/$/, '');
-
-export function withBase(path: string) {
-  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
-  return `${BASE_PATH}${normalizedPath}`;
-}
-```
-
-然后在模板里用 `withBase('/blog/')` 代替 `/blog/`。
-
-## 新增文章
-
-在 `src/content/blog/` 里新建 `.md` 文件：
-
-```md
----
-title: '文章标题'
-description: '一句话简介'
-pubDate: '2026-06-25'
-category: '技术'
-tags: ['标签1', '标签2']
----
-
-正文内容。
-```
-
-push 到 GitHub 后，Actions 会自动构建部署。
-
-## 踩过的坑
-
-### 1. 路径问题
-
-最头疼的是路径。设置了 `base` 之后，RSS、sitemap、favicon 的路径都要手动调整，否则部署后会 404。
-
-### 2. 字体加载
-
-Astro 默认用的 Atkinson 字体，如果想换字体，需要修改 `global.css` 里的 `@font-face`。
-
-### 3. 图片路径
-
-文章里的 `heroImage` 用的是相对路径，指向 `src/assets/` 下的图片。如果图片路径写错，构建会报错。
-
-## 总结
-
-整个搭建过程大概花了半天时间，主要时间花在路径配置上。如果你也想搭一个类似的博客，可以直接 fork 我的仓库，改改配置就行。
-
-**仓库地址：** [hilavera-blog](https://github.com/hilavera/hilavera-blog)
+下一步我会继续把首页做成更像个人开发空间的样子，并记录每次改动背后的原因。
