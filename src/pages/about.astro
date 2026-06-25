@@ -1,42 +1,119 @@
 ---
-import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
-import Layout from '../layouts/BlogPost.astro';
+import TechPage from '../layouts/TechPage.astro';
+import { SITE_TITLE } from '../consts';
+
+const progressItems = [
+	{ label: '页面结构', value: 'HTML / CSS 已能完成基础布局和响应式调整' },
+	{ label: '交互能力', value: 'JavaScript 正在练习搜索、筛选、状态保存和面板切换' },
+	{ label: '发布流程', value: 'Astro + GitHub Pages 已经跑通自动部署' },
+];
+
+const workflowItems = [
+	'先确认目标和页面结构，再改样式，不盲目堆效果。',
+	'每次改动后运行构建和测试，避免只靠肉眼判断。',
+	'把踩坑过程写成文章，留下能复用的解决路径。',
+];
+
+const nextPlans = [
+	'继续补 TypeScript 基础，理解类型和组件数据结构。',
+	'把首页的大文件逐步拆成更清楚的组件。',
+	'补更多真实开发日志，让博客内容和页面功能一起成长。',
+];
 ---
 
-<Layout
-	title="关于这个博客"
-	description="这个博客用来记录入门开发者的学习路线、项目复盘、踩坑记录和工具配置。"
-	pubDate={new Date('2026-06-25')}
-	heroImage={AboutHeroImage}
+<TechPage
+	title={`关于 - ${SITE_TITLE}`}
+	description="关于 hilavera 博客：入门开发者的公开学习档案、当前进度、工作流和下一步计划。"
+	eyebrow="public learning profile"
+	heading="公开学习档案"
+	summary="我是 hilavera，一个正在补前端基础、做项目、写复盘的入门开发者。这个博客会记录我从能跑起来到能讲清楚的过程。"
+	stats={[
+		{ label: '定位', value: '入门开发者' },
+		{ label: '方向', value: '前端 / 博客 / 部署' },
+		{ label: '方式', value: '边做边写' },
+	]}
 >
-	<p>
-		我是 hilavera，一个正在补基础、做项目、写复盘的入门开发者。
-	</p>
+	<section class="page-section density-grid">
+		<article class="surface-card">
+			<span class="card-kicker">why</span>
+			<h2>为什么写这个博客</h2>
+			<p>学习开发时最容易丢失的是过程：报错、搜索、尝试、验证。博客把这些过程保存下来，方便以后复盘。</p>
+		</article>
+		<article class="surface-card">
+			<span class="card-kicker">focus</span>
+			<h2>内容定位</h2>
+			<p>不追求高级术语，优先写真实问题、实际改动和验证结果。每篇文章都尽量能被未来的自己看懂。</p>
+		</article>
+		<article class="surface-card">
+			<span class="card-kicker">status</span>
+			<h2>当前阶段</h2>
+			<p>正在从 HTML、CSS、JavaScript、Astro 和 GitHub Pages 这些基础能力开始补齐。</p>
+		</article>
+	</section>
 
-	<p>
-		这个博客不是简历，也不是教程站。它更像一个公开学习仓库：把我遇到的问题、查过的资料、
-		改过的代码和最后的验证结果保存下来。
-	</p>
+	<section class="page-section surface-card">
+		<div class="section-heading">
+			<div>
+				<h2>当前进度</h2>
+				<p>用清单方式记录现在能做什么、还需要继续补什么。</p>
+			</div>
+			<span class="card-kicker">learning status</span>
+		</div>
+		<div class="density-grid">
+			{
+				progressItems.map((item) => (
+					<article class="surface-card">
+						<span class="card-kicker">{item.label}</span>
+						<p>{item.value}</p>
+					</article>
+				))
+			}
+		</div>
+	</section>
 
-	<h2>当前学习路线</h2>
-	<ul>
-		<li>HTML / CSS：先把页面结构和响应式布局做稳</li>
-		<li>JavaScript：理解 DOM 操作、事件和基础数据处理</li>
-		<li>Astro：用静态网站练习组件、路由和内容集合</li>
-		<li>GitHub Pages：把每次项目改动发布到线上验证</li>
-	</ul>
+	<section class="page-section density-grid two">
+		<article class="surface-card">
+			<h2>工作流</h2>
+			<ol>
+				{workflowItems.map((item) => <li>{item}</li>)}
+			</ol>
+		</article>
+		<article class="surface-card">
+			<h2>写作原则</h2>
+			<ul>
+				<li>写清楚问题，不只写结论。</li>
+				<li>写清楚验证，不只写“应该可以”。</li>
+				<li>保留命令、路径和关键判断，方便下次复用。</li>
+			</ul>
+		</article>
+	</section>
 
-	<h2>内容会写什么</h2>
-	<ul>
-		<li><strong>开发日志</strong> — 记录每天或每阶段做了什么</li>
-		<li><strong>学习笔记</strong> — 整理概念、命令和小练习</li>
-		<li><strong>项目复盘</strong> — 写清楚需求、实现、问题和验证</li>
-		<li><strong>工具配置</strong> — 保存环境配置和踩坑记录</li>
-	</ul>
+	<section class="page-section surface-card">
+		<div class="section-heading">
+			<div>
+				<h2>下一步计划</h2>
+				<p>接下来会继续完善内容、组件和学习记录。</p>
+			</div>
+			<span class="card-kicker">next steps</span>
+		</div>
+		<div class="density-grid">
+			{
+				nextPlans.map((plan, index) => (
+					<article class="surface-card">
+						<span class="card-kicker">plan {String(index + 1).padStart(2, '0')}</span>
+						<p>{plan}</p>
+					</article>
+				))
+			}
+		</div>
+	</section>
 
-	<h2>联系我</h2>
-	<p>
-		如果你也在搭博客、学前端、配置 GitHub Pages，欢迎通过
-		<a href="https://github.com/hilavera">GitHub</a> 联系我。
-	</p>
-</Layout>
+	<section class="page-section surface-card">
+		<h2>联系和项目入口</h2>
+		<p>
+			如果你也在搭博客、学前端或配置 GitHub Pages，可以通过
+			<a class="page-link" href="https://github.com/hilavera">GitHub</a>
+			查看我的公开项目。
+		</p>
+	</section>
+</TechPage>

@@ -1,142 +1,160 @@
 ---
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
-import BaseHead from '../../components/BaseHead.astro';
-import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
-import Header from '../../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE, withBase } from '../../consts';
+import TechPage from '../../layouts/TechPage.astro';
+import { SITE_TITLE, withBase } from '../../consts';
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+const categories = Array.from(new Set(posts.map((post) => post.data.category)));
+const tags = Array.from(new Set(posts.flatMap((post) => post.data.tags))).slice(0, 10);
+const latestPost = posts[0];
+const reviewPostCount = posts.filter((post) => post.data.category === '项目复盘').length;
 ---
 
-<!doctype html>
-<html lang="zh-CN">
-	<head>
-		<BaseHead title={`文章 - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
+<TechPage
+	title={`文章 - ${SITE_TITLE}`}
+	description="hilavera 的开发日志、项目复盘、学习笔记和工具配置文章索引。"
+	eyebrow="content index"
+	heading="开发日志索引"
+	summary="这里不是普通文章列表，而是按学习阶段整理的开发记录：每篇都尽量写清楚目标、过程、问题和验证方式。"
+	stats={[
+		{ label: '文章', value: `${posts.length} 篇` },
+		{ label: '分类', value: `${categories.length} 个` },
+		{ label: '复盘', value: `${reviewPostCount} 篇` },
+	]}
+>
+	<section class="page-section density-grid">
+		<article class="surface-card">
+			<span class="card-kicker">NAV</span>
+			<h2>文章导航</h2>
+			<p>优先看项目复盘和部署记录，再看学习笔记。这样能从真实改动里理解前端开发流程。</p>
+		</article>
+		<article class="surface-card">
+			<span class="card-kicker">LATEST</span>
+			<h2>最新发布</h2>
+			{
+				latestPost ? (
+					<p>
+						<a class="page-link" href={withBase(`/blog/${latestPost.id}/`)}>
+							{latestPost.data.title}
+						</a>
+					</p>
+				) : (
+					<p>还没有发布文章。</p>
+				)
 			}
-			.intro {
-				margin-bottom: 2em;
+		</article>
+		<article class="surface-card">
+			<span class="card-kicker">RHYTHM</span>
+			<h2>写作节奏</h2>
+			<p>每次页面改动、部署、踩坑和验证都尽量沉淀成一篇短文，方便以后回看。</p>
+		</article>
+	</section>
+
+	<section class="page-section surface-card">
+		<div class="section-heading">
+			<div>
+				<h2>文章列表</h2>
+				<p>按发布时间排序，保留文章封面、分类、日期、描述和标签。</p>
+			</div>
+			<span class="card-kicker">{posts.length} records</span>
+		</div>
+		<ul class="article-list">
+			{
+				posts.map((post) => (
+					<li class="article-row">
+						<a class="article-link" href={withBase(`/blog/${post.id}/`)}>
+							{post.data.heroImage && (
+								<Image width={420} height={210} src={post.data.heroImage} alt="" />
+							)}
+							<div>
+								<p class="card-kicker">
+									{post.data.category} / <FormattedDate date={post.data.pubDate} />
+								</p>
+								<h3>{post.data.title}</h3>
+								<p>{post.data.description}</p>
+								<div class="tag-row">
+									{post.data.tags.map((tag) => <span class="tech-tag">{tag}</span>)}
+								</div>
+							</div>
+						</a>
+					</li>
+				))
 			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 1.5rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
+		</ul>
+	</section>
+
+	<section class="page-section density-grid two">
+		<article class="surface-card">
+			<h2>常见主题</h2>
+			<ul class="tag-row">
+				{tags.map((tag) => <li class="tech-tag">{tag}</li>)}
+			</ul>
+		</article>
+		<article class="surface-card">
+			<h2>阅读建议</h2>
+			<ol>
+				<li>先看部署文章，理解博客怎么从本地到线上。</li>
+				<li>再看项目复盘，学习怎么记录改动和验证。</li>
+				<li>最后看工具配置，把常用流程变成自己的清单。</li>
+			</ol>
+		</article>
+	</section>
+
+	<style>
+		.article-list {
+			display: grid;
+			gap: 0.75rem;
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+		.article-row {
+			list-style: none;
+		}
+		.article-link {
+			background: rgba(2, 6, 23, 34%);
+			border: 1px solid rgba(125, 211, 252, 16%);
+			border-radius: 8px;
+			color: inherit;
+			display: grid;
+			gap: 0.85rem;
+			grid-template-columns: 220px minmax(0, 1fr);
+			padding: 0.75rem;
+			text-decoration: none;
+			transition:
+				border-color 160ms ease,
+				box-shadow 160ms ease,
+				transform 160ms ease;
+		}
+		.article-link:hover {
+			border-color: rgba(34, 211, 238, 38%);
+			box-shadow: 0 10px 30px rgba(8, 145, 178, 16%);
+			transform: translateY(-1px);
+		}
+		.article-link img {
+			aspect-ratio: 2 / 1;
+			border-radius: 8px;
+			height: 100%;
+			object-fit: cover;
+			width: 100%;
+		}
+		.article-link h3 {
+			color: #f8fafc;
+			font-size: 1.08rem;
+			margin: 0.2rem 0;
+		}
+		.article-link p {
+			color: #cbd5e1;
+			margin: 0;
+		}
+		@media (max-width: 720px) {
+			.article-link {
+				grid-template-columns: 1fr;
 			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 8px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			.description {
-				color: rgb(var(--gray-dark));
-				margin: 0.5em 0;
-			}
-			.tags {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 0.35em;
-				margin-top: 0.75em;
-			}
-			.tag {
-				border: 1px solid rgb(var(--gray-light));
-				border-radius: 999px;
-				color: rgb(var(--gray-dark));
-				font-size: 0.8em;
-				padding: 0.05em 0.55em;
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<section class="intro">
-				<h1>文章</h1>
-				<p>这里按时间整理技术、生活、阅读和随笔内容。</p>
-			</section>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={withBase(`/blog/${post.id}/`)}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										{post.data.category} / <FormattedDate date={post.data.pubDate} />
-									</p>
-									<p class="description">{post.data.description}</p>
-									<div class="tags">
-										{post.data.tags.map((tag) => <span class="tag">{tag}</span>)}
-									</div>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
-		</main>
-		<Footer />
-	</body>
-</html>
+		}
+	</style>
+</TechPage>

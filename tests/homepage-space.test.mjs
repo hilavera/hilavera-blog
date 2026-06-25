@@ -43,6 +43,59 @@ test('home page presents an entry-level developer space with tech styling', () =
 	}
 });
 
+test('home page keeps a compact space proportion', () => {
+	for (const cssRule of [
+		'width: min(1040px, calc(100% - 2rem))',
+		'min-height: 210px',
+		'grid-template-columns: 196px minmax(0, 1fr)',
+		'min-height: 380px',
+	]) {
+		assert.match(source, new RegExp(cssRule.replace(/[()]/g, '\\$&')));
+	}
+});
+
+test('home page includes lightweight blog space enhancements', () => {
+	for (const text of ['文章搜索', '分类筛选', '学习进度', '近期计划', '项目卡片', '技术栈']) {
+		assert.match(html, new RegExp(text));
+	}
+
+	for (const hook of ['data-post-search', 'data-category-filter', 'data-progress-meter', 'data-project-card']) {
+		assert.match(source, new RegExp(hook));
+	}
+
+	assert.match(source, /function filterPosts/);
+});
+
+test('home page includes visual polish layers without changing layout', () => {
+	for (const className of ['visual-grid', 'surface-glow', 'soft-reveal', 'focus-ring']) {
+		assert.match(source, new RegExp(className));
+	}
+
+	for (const motionRule of ['@keyframes panelEnter', '@keyframes scanDrift', '@media (prefers-reduced-motion: reduce)']) {
+		assert.match(source, new RegExp(motionRule.replace(/[()]/g, '\\$&')));
+	}
+});
+
+test('home page includes local-only visitor interactions', () => {
+	for (const text of ['访客互动台', '访客昵称', '本地点赞', '本地收藏', '留言草稿']) {
+		assert.match(html, new RegExp(text));
+	}
+
+	for (const hook of [
+		'data-visitor-name',
+		'data-like-button',
+		'data-favorite-button',
+		'data-comment-draft',
+		'data-comment-preview',
+	]) {
+		assert.match(source, new RegExp(hook));
+	}
+
+	for (const behavior of ['localStorage', 'function updateVisitorState', 'function saveCommentDraft']) {
+		assert.match(source, new RegExp(behavior));
+	}
+});
+
 test('blog posts read like entry-level developer publishing notes', () => {
 	const combinedArticles = articleSources.join('\n');
 

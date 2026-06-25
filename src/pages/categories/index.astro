@@ -1,9 +1,7 @@
 ---
-import BaseHead from '../../components/BaseHead.astro';
-import Footer from '../../components/Footer.astro';
-import Header from '../../components/Header.astro';
 import { getCollection } from 'astro:content';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import TechPage from '../../layouts/TechPage.astro';
+import { SITE_TITLE } from '../../consts';
 
 const posts = await getCollection('blog');
 const categoryCounts = posts.reduce<Record<string, number>>((counts, post) => {
@@ -16,72 +14,103 @@ const tagCounts = posts.reduce<Record<string, number>>((counts, post) => {
 	}
 	return counts;
 }, {});
+
+const categoryNotes: Record<string, string> = {
+	开发日志: '记录每次学习、开发和部署过程，保留真实上下文。',
+	学习笔记: '把概念、命令和小练习整理成能复用的材料。',
+	项目复盘: '复盘目标、实现、问题、验证和下一步改进。',
+	工具配置: '保存环境配置、调试工具和发布流程。',
+};
+
+const writingDirections = [
+	'补一篇 Git 基础命令清单，记录提交、回滚、分支和推送。',
+	'写一篇 CSS 布局复盘，对比 grid、flex 和响应式断点。',
+	'整理 Chrome DevTools 调试流程，记录怎么定位样式问题。',
+];
 ---
 
-<!doctype html>
-<html lang="zh-CN">
-	<head>
-		<BaseHead title={`分类 - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 840px;
+<TechPage
+	title={`分类 - ${SITE_TITLE}`}
+	description="hilavera 博客的分类矩阵、标签云和下一步写作方向。"
+	eyebrow="knowledge map"
+	heading="学习地图"
+	summary="分类不是装饰，它是学习路线的索引。这里把文章拆成开发日志、学习笔记、项目复盘和工具配置，方便回看每个阶段主要练了什么。"
+	stats={[
+		{ label: '分类', value: `${Object.keys(categoryCounts).length} 个` },
+		{ label: '标签', value: `${Object.keys(tagCounts).length} 个` },
+		{ label: '文章', value: `${posts.length} 篇` },
+	]}
+>
+	<section class="page-section surface-card">
+		<div class="section-heading">
+			<div>
+				<h2>分类矩阵</h2>
+				<p>每个分类对应一种写作目的，避免文章只是堆在一起。</p>
+			</div>
+			<span class="card-kicker">category map</span>
+		</div>
+		<div class="density-grid two">
+			{
+				Object.entries(categoryCounts).map(([category, count]) => (
+					<article class="surface-card category-card">
+						<span class="card-kicker">{count} posts</span>
+						<h3>{category}</h3>
+						<p>{categoryNotes[category] ?? '用于整理阶段性学习内容。'}</p>
+					</article>
+				))
 			}
-			.group {
-				border-top: 1px solid rgb(var(--gray-light));
-				margin-top: 2em;
-				padding-top: 2em;
-			}
-			.term-list {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 0.75em;
-				list-style: none;
-				margin: 0;
-				padding: 0;
-			}
-			.term {
-				border: 1px solid rgb(var(--gray-light));
-				border-radius: 999px;
-				padding: 0.25em 0.75em;
-			}
-			.count {
-				color: rgb(var(--gray));
-				font-size: 0.85em;
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>分类与标签</h1>
-			<p>分类用于区分文章的大方向，标签用于标记更具体的主题。</p>
+		</div>
+	</section>
 
-			<section class="group">
-				<h2>分类</h2>
-				<ul class="term-list">
-					{
-						Object.entries(categoryCounts).map(([category, count]) => (
-							<li class="term">
-								{category} <span class="count">{count} 篇</span>
-							</li>
-						))
-					}
-				</ul>
-			</section>
+	<section class="page-section density-grid two">
+		<article class="surface-card">
+			<h2>标签云</h2>
+			<ul class="term-list">
+				{
+					Object.entries(tagCounts).map(([tag, count]) => (
+						<li class="term-pill">
+							<strong>{tag}</strong>
+							<span>{count} 次</span>
+						</li>
+					))
+				}
+			</ul>
+		</article>
+		<article class="surface-card">
+			<h2>分类使用规则</h2>
+			<ol>
+				<li>文章解决了真实问题，就归入项目复盘或踩坑相关标签。</li>
+				<li>文章主要整理概念和命令，就归入学习笔记。</li>
+				<li>文章记录工具安装、发布、调试流程，就归入工具配置。</li>
+			</ol>
+		</article>
+	</section>
 
-			<section class="group">
-				<h2>标签</h2>
-				<ul class="term-list">
-					{
-						Object.entries(tagCounts).map(([tag, count]) => (
-							<li class="term">
-								{tag} <span class="count">{count} 篇</span>
-							</li>
-						))
-					}
-				</ul>
-			</section>
-		</main>
-		<Footer />
-	</body>
-</html>
+	<section class="page-section surface-card">
+		<div class="section-heading">
+			<div>
+				<h2>下一步写作方向</h2>
+				<p>先补基础、再补复盘，内容会围绕能实际执行的开发任务展开。</p>
+			</div>
+			<span class="card-kicker">next queue</span>
+		</div>
+		<div class="density-grid">
+			{
+				writingDirections.map((direction, index) => (
+					<article class="surface-card">
+						<span class="card-kicker">task {String(index + 1).padStart(2, '0')}</span>
+						<p>{direction}</p>
+					</article>
+				))
+			}
+		</div>
+	</section>
+
+	<style>
+		.category-card {
+			background:
+				linear-gradient(135deg, rgba(8, 47, 73, 42%), rgba(2, 6, 23, 30%)),
+				rgba(2, 6, 23, 36%);
+		}
+	</style>
+</TechPage>
