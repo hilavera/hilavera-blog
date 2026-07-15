@@ -26,9 +26,9 @@ const navItems = [
 ];
 
 const statusItems = [
-	{ label: 'NOW', value: 'Astro + GitHub Pages' },
-	{ label: 'LEARNING', value: 'JavaScript / CSS / Markdown' },
-	{ label: 'NEXT', value: 'TypeScript 基础和组件拆分' },
+	{ label: 'NOW', value: 'Astro + GitHub Pages', target: 'home' },
+	{ label: 'LEARNING', value: 'JavaScript / CSS / Markdown', target: 'posts' },
+	{ label: 'NEXT', value: 'TypeScript 基础和组件拆分', target: 'about' },
 ];
 
 const learningProgress = [
@@ -242,8 +242,21 @@ const commandItems = [
 				min-width: 96px;
 			}
 			.status-chip {
+				appearance: none;
+				cursor: pointer;
 				flex: 1 1 178px;
+				font: inherit;
 				min-width: 0;
+				text-align: left;
+				transition:
+					background 150ms ease,
+					border-color 150ms ease,
+					transform 150ms ease;
+			}
+			.status-chip:hover {
+				background: rgba(56, 189, 248, 12%);
+				border-color: var(--premium-border-strong);
+				transform: translateY(-1px);
 			}
 			.profile-stats dt,
 			.status-chip span {
@@ -901,7 +914,8 @@ const commandItems = [
 					transition: none;
 				}
 				.command-trigger,
-				.command-item {
+				.command-item,
+				.status-chip {
 					transition: none;
 				}
 			}
@@ -984,10 +998,10 @@ const commandItems = [
 					<div class="status-row" aria-label="当前学习状态">
 						{
 							statusItems.map((item) => (
-								<div class="status-chip">
+								<button class="status-chip focus-ring" type="button" data-status-target={item.target}>
 									<span>{item.label}</span>
 									<strong>{item.value}</strong>
-								</div>
+								</button>
 							))
 						}
 					</div>
@@ -1004,6 +1018,7 @@ const commandItems = [
 								role="tab"
 								aria-controls={`panel-${item.id}`}
 								aria-selected={index === 0 ? 'true' : 'false'}
+								tabindex={index === 0 ? 0 : -1}
 								data-panel-target={item.id}
 							>
 								<span>{item.label}</span>
@@ -1316,6 +1331,7 @@ const commandItems = [
 			const commandItems = Array.from(document.querySelectorAll('[data-command-item]'));
 			const tabs = Array.from(document.querySelectorAll('[data-panel-target]'));
 			const panels = Array.from(document.querySelectorAll('[data-panel]'));
+			const statusShortcuts = Array.from(document.querySelectorAll('[data-status-target]'));
 			const postSearch = document.querySelector('[data-post-search]');
 			const categoryFilter = document.querySelector('[data-category-filter]');
 			const filterCount = document.querySelector('[data-filter-count]');
@@ -1377,16 +1393,19 @@ const commandItems = [
 
 			function runCommand(item) {
 				if (item.dataset.commandKind === 'panel') {
+					closeCommandCenter();
 					showPanel(item.dataset.commandTarget, { focusPanel: true });
+					return;
 				} else if (item.dataset.commandKind === 'category') {
 					if (categoryFilter) categoryFilter.value = item.dataset.commandTarget || '';
+					closeCommandCenter();
 					showPanel('posts', { focusPanel: true });
 					filterPosts();
+					return;
 				} else if (item.dataset.commandHref) {
 					window.location.assign(item.dataset.commandHref);
 					return;
 				}
-				closeCommandCenter();
 			}
 
 			function readVisitorState() {
@@ -1432,11 +1451,19 @@ const commandItems = [
 				updateVisitorState(nextState);
 			}
 
-			function showPanel(panelId) {
+			function focusPanelHeading(panelId) {
+				const heading = document.querySelector(`[data-panel="${panelId}"] h2`);
+				if (!heading) return;
+				heading.setAttribute('tabindex', '-1');
+				heading.focus({ preventScroll: true });
+			}
+
+			function showPanel(panelId, { updateHash = true, focusPanel = false } = {}) {
 				tabs.forEach((tab) => {
 					const isActive = tab.dataset.panelTarget === panelId;
 					tab.classList.toggle('is-active', isActive);
 					tab.setAttribute('aria-selected', String(isActive));
+					tab.tabIndex = isActive ? 0 : -1;
 				});
 
 				panels.forEach((panel) => {
@@ -1450,9 +1477,10 @@ const commandItems = [
 					}
 				});
 
-				if (window.history.replaceState) {
-					window.history.replaceState(null, '', `#${panelId}`);
+				if (updateHash && window.location.hash !== `#${panelId}`) {
+					window.history.pushState(null, '', `#${panelId}`);
 				}
+				if (focusPanel) focusPanelHeading(panelId);
 			}
 
 			function filterPosts() {
@@ -1505,8 +1533,24 @@ const commandItems = [
 				if (event.key === 'Escape' && commandDialog?.open) closeCommandCenter();
 			});
 
-			tabs.forEach((tab) => {
+			tabs.forEach((tab, index) => {
 				tab.addEventListener('click', () => showPanel(tab.dataset.panelTarget));
+				tab.addEventListener('keydown', (event) => {
+					const isNextTab = event.key === 'ArrowRight';
+					const isPreviousTab = event.key === 'ArrowLeft';
+					if (!isNextTab && !isPreviousTab) return;
+					event.preventDefault();
+					const direction = isNextTab ? 1 : -1;
+					const nextTab = tabs[(index + direction + tabs.length) % tabs.length];
+					nextTab?.focus();
+					showPanel(nextTab?.dataset.panelTarget);
+				});
+			});
+
+			statusShortcuts.forEach((button) => {
+				button.addEventListener('click', () => {
+					showPanel(button.dataset.statusTarget, { focusPanel: true });
+				});
 			});
 
 			postSearch?.addEventListener('input', filterPosts);
@@ -1540,10 +1584,16 @@ const commandItems = [
 				});
 			});
 
-			const initialPanel = window.location.hash.replace('#', '');
-			if (tabs.some((tab) => tab.dataset.panelTarget === initialPanel)) {
-				showPanel(initialPanel);
+			function panelFromHash() {
+				const panelId = window.location.hash.replace('#', '');
+				return tabs.some((tab) => tab.dataset.panelTarget === panelId) ? panelId : 'home';
 			}
+
+			window.addEventListener('hashchange', () => {
+				showPanel(panelFromHash(), { updateHash: false });
+			});
+
+			showPanel(panelFromHash(), { updateHash: false });
 
 			filterPosts();
 			updateVisitorState();

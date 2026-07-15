@@ -37,3 +37,18 @@ test('command center includes panels categories and posts', () => {
 		assert.match(source, new RegExp(behavior));
 	}
 });
+
+test('status cards and sidebar support direct keyboard navigation', () => {
+	assert.match(html, /data-status-target="home"/);
+	assert.match(html, /data-status-target="posts"/);
+	assert.match(html, /data-status-target="about"/);
+	assert.match(source, /function focusPanelHeading/);
+	assert.match(source, /event\.key === 'ArrowRight'/);
+	assert.match(source, /event\.key === 'ArrowLeft'/);
+});
+
+test('panel state follows browser history', () => {
+	assert.match(source, /window\.history\.pushState/);
+	assert.match(source, /window\.addEventListener\('hashchange'/);
+	assert.match(source, /updateHash: false/);
+});
