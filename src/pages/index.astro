@@ -71,10 +71,10 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 		<style>
 			body {
 				background:
-					radial-gradient(circle at 12% 0%, rgba(34, 211, 238, 18%), transparent 28rem),
-					radial-gradient(circle at 88% 8%, rgba(20, 184, 166, 18%), transparent 30rem),
-					linear-gradient(180deg, #07111f 0%, #0b1220 48%, #111827 100%);
-				color: #d8e8f8;
+					radial-gradient(circle at 12% -4%, rgba(56, 189, 248, 16%), transparent 28rem),
+					radial-gradient(circle at 88% 4%, rgba(214, 181, 109, 13%), transparent 30rem),
+					linear-gradient(180deg, var(--premium-ink) 0%, var(--premium-bg) 48%, var(--premium-bg-soft) 100%);
+				color: var(--premium-soft);
 			}
 			main.space-home {
 				width: min(1040px, calc(100% - 2rem));
@@ -98,18 +98,18 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 				background:
 					repeating-linear-gradient(
 						0deg,
-						rgba(125, 211, 252, 6%) 0,
-						rgba(125, 211, 252, 6%) 1px,
+						rgba(148, 163, 184, 5%) 0,
+						rgba(148, 163, 184, 5%) 1px,
 						transparent 1px,
 						transparent 18px
 					),
-					linear-gradient(120deg, transparent 10%, rgba(34, 211, 238, 10%) 50%, transparent 88%);
-				opacity: 0.28;
+					linear-gradient(120deg, transparent 10%, rgba(214, 181, 109, 10%) 50%, transparent 88%);
+				opacity: 0.24;
 			}
 			.visual-grid::after {
 				background:
-					linear-gradient(90deg, transparent, rgba(20, 184, 166, 10%), transparent),
-					radial-gradient(ellipse at 50% 0%, rgba(34, 211, 238, 10%), transparent 58%);
+					linear-gradient(90deg, transparent, rgba(214, 181, 109, 10%), transparent),
+					radial-gradient(ellipse at 50% 0%, rgba(56, 189, 248, 10%), transparent 58%);
 				filter: blur(0.2px);
 				opacity: 0.55;
 			}
@@ -120,27 +120,28 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 			}
 			.profile-hero {
 				background:
-					linear-gradient(135deg, rgba(15, 23, 42, 95%) 0%, rgba(12, 74, 110, 82%) 58%, rgba(6, 78, 59, 72%) 100%),
-					linear-gradient(90deg, rgba(34, 211, 238, 28%), rgba(20, 184, 166, 12%));
-				border: 1px solid rgba(125, 211, 252, 24%);
-				border-radius: 8px;
-				box-shadow: 0 20px 60px rgba(8, 47, 73, 28%);
+					linear-gradient(135deg, rgba(15, 23, 42, 96%) 0%, rgba(17, 24, 39, 90%) 58%, rgba(68, 56, 28, 72%) 100%),
+					radial-gradient(circle at 18% 12%, rgba(56, 189, 248, 20%), transparent 18rem),
+					linear-gradient(90deg, rgba(214, 181, 109, 18%), rgba(56, 189, 248, 10%));
+				border: 1px solid var(--premium-border);
+				border-radius: var(--premium-radius);
+				box-shadow: var(--premium-shadow), var(--premium-inset);
 				margin-bottom: 1rem;
 				overflow: hidden;
 				position: relative;
 			}
 			.profile-hero::before {
 				background-image:
-					linear-gradient(rgba(125, 211, 252, 10%) 1px, transparent 1px),
-					linear-gradient(90deg, rgba(125, 211, 252, 10%) 1px, transparent 1px);
-				background-size: 36px 36px;
+					linear-gradient(rgba(148, 163, 184, 6%) 1px, transparent 1px),
+					linear-gradient(90deg, rgba(148, 163, 184, 6%) 1px, transparent 1px);
+				background-size: 44px 44px;
 				content: '';
 				inset: 0;
-				opacity: 0.42;
+				opacity: 0.34;
 				position: absolute;
 			}
 			.profile-hero.surface-glow::after {
-				background: linear-gradient(120deg, transparent 8%, rgba(255, 255, 255, 14%) 44%, transparent 72%);
+				background: linear-gradient(120deg, transparent 8%, rgba(214, 181, 109, 16%) 44%, rgba(255, 255, 255, 10%) 58%, transparent 72%);
 				content: '';
 				inset: 0;
 				opacity: 0.35;
@@ -154,7 +155,7 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 				z-index: 1;
 			}
 			.profile-cover::after {
-				background: linear-gradient(90deg, #22d3ee, #14b8a6, transparent);
+				background: linear-gradient(90deg, transparent, var(--premium-gold), var(--premium-accent), transparent);
 				bottom: 0;
 				content: '';
 				height: 3px;
@@ -165,7 +166,7 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 			.profile-kicker,
 			.code-line {
 				align-items: center;
-				color: #67e8f9;
+				color: var(--premium-accent);
 				display: inline-flex;
 				font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 				font-size: 0.76rem;
@@ -185,14 +186,14 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 				width: 0.55rem;
 			}
 			.profile-name {
-				color: #f8fafc;
+				color: var(--premium-text);
 				font-size: 2.9rem;
 				letter-spacing: 0;
 				line-height: 1.05;
 				margin-bottom: 0.3rem;
 			}
 			.profile-description {
-				color: #cbd5e1;
+				color: var(--premium-soft);
 				font-size: 0.98rem;
 				line-height: 1.65;
 				max-width: 640px;
@@ -210,10 +211,10 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 			}
 			.profile-stats div,
 			.status-chip {
-				background: rgba(15, 23, 42, 72%);
-				border: 1px solid rgba(125, 211, 252, 22%);
-				border-radius: 8px;
-				box-shadow: inset 0 1px 0 rgba(255, 255, 255, 8%);
+				background: rgba(var(--premium-ink-rgb), 42%);
+				border: 1px solid var(--premium-border);
+				border-radius: 10px;
+				box-shadow: var(--premium-inset);
 				padding: 0.48rem 0.65rem;
 			}
 			.profile-stats div {
@@ -225,14 +226,14 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 			}
 			.profile-stats dt,
 			.status-chip span {
-				color: #67e8f9;
+				color: var(--premium-accent);
 				font-size: 0.72rem;
 				font-weight: 700;
 				letter-spacing: 0.08em;
 			}
 			.profile-stats dd,
 			.status-chip strong {
-				color: #f8fafc;
+				color: var(--premium-text);
 				display: block;
 				font-size: 0.92rem;
 				font-weight: 700;
@@ -246,13 +247,15 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 			}
 			.space-sidebar,
 			.space-panel {
-				background: rgba(15, 23, 42, 88%);
-				border: 1px solid rgba(125, 211, 252, 18%);
-				box-shadow: 0 16px 50px rgba(2, 6, 23, 32%);
-				backdrop-filter: blur(14px);
+				background:
+					linear-gradient(145deg, rgba(255, 255, 255, 7%), transparent 34%),
+					linear-gradient(180deg, var(--premium-panel-strong), rgba(10, 16, 30, 78%));
+				border: 1px solid var(--premium-border);
+				box-shadow: var(--premium-shadow), var(--premium-inset);
+				backdrop-filter: blur(18px);
 			}
 			.space-sidebar {
-				border-radius: 8px;
+				border-radius: var(--premium-radius);
 				display: grid;
 				gap: 0.35rem;
 				padding: 0.55rem;
@@ -262,8 +265,8 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 			.space-tab {
 				background: transparent;
 				border: 1px solid transparent;
-				border-radius: 8px;
-				color: #cbd5e1;
+				border-radius: 10px;
+				color: var(--premium-soft);
 				cursor: pointer;
 				display: grid;
 				font: inherit;
@@ -275,14 +278,14 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 			.space-tab:hover,
 			.space-tab.is-active {
 				background:
-					linear-gradient(90deg, rgba(34, 211, 238, 18%), transparent),
-					rgba(8, 145, 178, 18%);
-				border-color: rgba(34, 211, 238, 28%);
-				color: #f8fafc;
+					linear-gradient(90deg, rgba(214, 181, 109, 16%), transparent),
+					rgba(56, 189, 248, 10%);
+				border-color: var(--premium-border-strong);
+				color: var(--premium-text);
 			}
 			.focus-ring:focus-visible {
-				box-shadow: 0 0 0 3px rgba(34, 211, 238, 18%);
-				outline: 1px solid rgba(125, 211, 252, 62%);
+				box-shadow: 0 0 0 3px rgba(214, 181, 109, 18%);
+				outline: 1px solid rgba(214, 181, 109, 62%);
 				outline-offset: 2px;
 			}
 			.space-tab span {
@@ -290,7 +293,7 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 				line-height: 1.2;
 			}
 			.space-tab small {
-				color: #94a3b8;
+				color: var(--premium-muted);
 				font-size: 0.75rem;
 				line-height: 1.3;
 			}
@@ -298,14 +301,14 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 				min-width: 0;
 			}
 			.space-panel {
-				border-radius: 8px;
+				border-radius: var(--premium-radius);
 				min-height: 380px;
 				overflow: hidden;
 				padding: 1.15rem;
 				position: relative;
 			}
 			.space-panel::before {
-				background: linear-gradient(90deg, rgba(34, 211, 238, 0%), rgba(34, 211, 238, 62%), rgba(20, 184, 166, 0%));
+				background: linear-gradient(90deg, transparent, rgba(214, 181, 109, 70%), rgba(139, 211, 255, 44%), transparent);
 				content: '';
 				height: 1px;
 				left: 0.9rem;
@@ -326,7 +329,7 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 			}
 			.panel-heading {
 				align-items: start;
-				border-bottom: 1px solid rgba(125, 211, 252, 16%);
+				border-bottom: 1px solid var(--premium-border);
 				display: flex;
 				gap: 0.85rem;
 				justify-content: space-between;
@@ -334,7 +337,7 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 				padding-bottom: 0.68rem;
 			}
 			.panel-heading h2 {
-				color: #f8fafc;
+				color: var(--premium-text);
 				font-size: 1.48rem;
 				line-height: 1.2;
 			}
@@ -342,13 +345,13 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 			.feature-item p,
 			.post-item p,
 			.about-body p {
-				color: #cbd5e1;
+				color: var(--premium-soft);
 				margin: 0;
 			}
 			.panel-link,
 			.post-item a,
 			.category-pill {
-				color: #67e8f9;
+				color: var(--premium-accent);
 			}
 			.panel-link {
 				font-size: 0.86rem;
@@ -363,9 +366,9 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 			}
 			.feature-item,
 			.post-item {
-				background: rgba(2, 6, 23, 32%);
-				border: 1px solid rgba(125, 211, 252, 16%);
-				border-radius: 8px;
+				background: rgba(var(--premium-ink-rgb), 32%);
+				border: 1px solid var(--premium-border);
+				border-radius: 10px;
 				padding: 0.72rem;
 				transition:
 					border-color 160ms ease,
@@ -377,15 +380,16 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 			.post-item:hover,
 			.dashboard-card:hover,
 			.project-card:hover {
-				border-color: rgba(34, 211, 238, 38%);
+				border-color: var(--premium-border-strong);
 				box-shadow:
-					0 10px 30px rgba(8, 145, 178, 16%),
-					inset 0 1px 0 rgba(255, 255, 255, 8%);
+					0 16px 42px rgba(214, 181, 109, 10%),
+					var(--premium-glow),
+					var(--premium-inset);
 				transform: translateY(-1px);
 			}
 			.feature-item h3,
 			.post-item h3 {
-				color: #f8fafc;
+				color: var(--premium-text);
 				font-size: 1.02rem;
 				line-height: 1.3;
 				margin-bottom: 0.28rem;
@@ -401,10 +405,10 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 				text-decoration: none;
 			}
 			.post-item a:hover {
-				color: #a7f3d0;
+				color: var(--premium-gold-soft);
 			}
 			.post-meta {
-				color: #94a3b8;
+				color: var(--premium-muted);
 				font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 				font-size: 0.78rem;
 				margin: 0 0 0.2rem;
@@ -419,10 +423,10 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 			.dashboard-card,
 			.project-card {
 				background:
-					linear-gradient(135deg, rgba(8, 47, 73, 42%), rgba(2, 6, 23, 28%)),
-					rgba(2, 6, 23, 36%);
-				border: 1px solid rgba(125, 211, 252, 18%);
-				border-radius: 8px;
+					linear-gradient(135deg, rgba(214, 181, 109, 10%), rgba(56, 189, 248, 8%)),
+					rgba(var(--premium-ink-rgb), 36%);
+				border: 1px solid var(--premium-border);
+				border-radius: 10px;
 				padding: 0.82rem;
 				transition:
 					border-color 160ms ease,
@@ -434,7 +438,7 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 			.project-card h3,
 			.interaction-card h3,
 			.about-body h3 {
-				color: #f8fafc;
+				color: var(--premium-text);
 				font-size: 1.02rem;
 				line-height: 1.3;
 				margin-bottom: 0.5rem;
@@ -457,50 +461,50 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 			}
 			.progress-top span,
 			.project-head h4 {
-				color: #e0f2fe;
+				color: var(--premium-text);
 				font-size: 0.92rem;
 				font-weight: 700;
 				margin: 0;
 			}
 			.progress-top strong,
 			.project-status {
-				color: #67e8f9;
+				color: var(--premium-accent);
 				font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 				font-size: 0.76rem;
 			}
 			.progress-track {
-				background: rgba(15, 23, 42, 85%);
-				border: 1px solid rgba(125, 211, 252, 16%);
+				background: rgba(var(--premium-ink-rgb), 70%);
+				border: 1px solid var(--premium-border);
 				border-radius: 999px;
 				height: 0.46rem;
 				margin: 0.35rem 0;
 				overflow: hidden;
 			}
 			.progress-track span {
-				background: linear-gradient(90deg, #22d3ee, #14b8a6);
+				background: linear-gradient(90deg, var(--premium-accent-strong), var(--premium-gold));
 				border-radius: inherit;
-				box-shadow: 0 0 18px rgba(34, 211, 238, 42%);
+				box-shadow: 0 0 18px rgba(214, 181, 109, 26%);
 				display: block;
 				height: 100%;
 				width: var(--progress);
 			}
 			.progress-note,
 			.project-card p {
-				color: #cbd5e1;
+				color: var(--premium-soft);
 				font-size: 0.88rem;
 				line-height: 1.55;
 				margin: 0;
 			}
 			.interaction-card {
 				background:
-					linear-gradient(135deg, rgba(14, 116, 144, 28%), rgba(2, 6, 23, 36%)),
-					rgba(2, 6, 23, 38%);
-				border: 1px solid rgba(125, 211, 252, 20%);
-				border-radius: 8px;
+					linear-gradient(135deg, rgba(214, 181, 109, 10%), rgba(56, 189, 248, 8%)),
+					rgba(var(--premium-ink-rgb), 38%);
+				border: 1px solid var(--premium-border);
+				border-radius: 10px;
 				padding: 0.82rem;
 			}
 			.interaction-note {
-				color: #94a3b8;
+				color: var(--premium-muted);
 				font-size: 0.84rem;
 				line-height: 1.55;
 				margin-bottom: 0.75rem;
@@ -519,10 +523,10 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 			}
 			.interaction-field input,
 			.interaction-field textarea {
-				background: rgba(2, 6, 23, 55%);
-				border: 1px solid rgba(125, 211, 252, 24%);
-				border-radius: 8px;
-				color: #f8fafc;
+				background: rgba(var(--premium-ink-rgb), 55%);
+				border: 1px solid var(--premium-border);
+				border-radius: 10px;
+				color: var(--premium-text);
 				font: inherit;
 				font-size: 0.92rem;
 				padding: 0.48rem 0.62rem;
@@ -537,25 +541,25 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 				gap: 0.55rem;
 			}
 			.interaction-button {
-				background: rgba(15, 23, 42, 76%);
-				border: 1px solid rgba(125, 211, 252, 24%);
-				border-radius: 8px;
-				color: #cbd5e1;
+				background: rgba(var(--premium-ink-rgb), 58%);
+				border: 1px solid var(--premium-border);
+				border-radius: 10px;
+				color: var(--premium-soft);
 				cursor: pointer;
 				font: inherit;
 				font-weight: 700;
 				padding: 0.46rem 0.72rem;
 			}
 			.interaction-button.is-active {
-				background: linear-gradient(135deg, rgba(8, 145, 178, 74%), rgba(20, 184, 166, 64%));
-				border-color: rgba(34, 211, 238, 58%);
-				color: #f8fafc;
+				background: linear-gradient(135deg, rgba(214, 181, 109, 72%), rgba(56, 189, 248, 28%));
+				border-color: rgba(214, 181, 109, 58%);
+				color: var(--premium-text);
 			}
 			.comment-preview {
-				background: rgba(2, 6, 23, 34%);
-				border: 1px dashed rgba(125, 211, 252, 20%);
-				border-radius: 8px;
-				color: #cbd5e1;
+				background: rgba(var(--premium-ink-rgb), 34%);
+				border: 1px dashed var(--premium-border);
+				border-radius: 10px;
+				color: var(--premium-soft);
 				font-size: 0.88rem;
 				line-height: 1.55;
 				min-height: 2.4rem;
@@ -563,7 +567,7 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 				white-space: pre-wrap;
 			}
 			.local-badge {
-				color: #67e8f9;
+				color: var(--premium-accent);
 				font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 				font-size: 0.72rem;
 			}
@@ -571,16 +575,16 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 				counter-reset: plan;
 			}
 			.plan-list li {
-				color: #cbd5e1;
+				color: var(--premium-soft);
 				line-height: 1.55;
 				padding-left: 2rem;
 				position: relative;
 			}
 			.plan-list li::before {
-				background: rgba(34, 211, 238, 16%);
-				border: 1px solid rgba(34, 211, 238, 28%);
+				background: rgba(214, 181, 109, 16%);
+				border: 1px solid rgba(214, 181, 109, 32%);
 				border-radius: 999px;
-				color: #67e8f9;
+				color: var(--premium-accent);
 				content: counter(plan, decimal-leading-zero);
 				counter-increment: plan;
 				font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -606,7 +610,7 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 			}
 			.tool-label,
 			.filter-count {
-				color: #67e8f9;
+				color: var(--premium-accent);
 				font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 				font-size: 0.72rem;
 				font-weight: 700;
@@ -615,10 +619,10 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 			}
 			.filter-field input,
 			.filter-field select {
-				background: rgba(2, 6, 23, 55%);
-				border: 1px solid rgba(125, 211, 252, 24%);
-				border-radius: 8px;
-				color: #f8fafc;
+				background: rgba(var(--premium-ink-rgb), 55%);
+				border: 1px solid var(--premium-border);
+				border-radius: 10px;
+				color: var(--premium-text);
 				font: inherit;
 				font-size: 0.92rem;
 				min-height: 2.25rem;
@@ -626,8 +630,8 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 			}
 			.filter-field input:focus,
 			.filter-field select:focus {
-				border-color: rgba(34, 211, 238, 72%);
-				box-shadow: 0 0 0 3px rgba(34, 211, 238, 12%);
+				border-color: rgba(214, 181, 109, 72%);
+				box-shadow: 0 0 0 3px rgba(214, 181, 109, 12%);
 				outline: none;
 			}
 			.filter-count {
@@ -648,8 +652,8 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 			}
 			.category-pill,
 			.tag-pill {
-				background: rgba(8, 47, 73, 36%);
-				border: 1px solid rgba(125, 211, 252, 18%);
+				background: rgba(56, 189, 248, 10%);
+				border: 1px solid var(--premium-border);
 				border-radius: 999px;
 				display: inline-flex;
 				gap: 0.38rem;
@@ -657,16 +661,16 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 				text-decoration: none;
 			}
 			button.category-pill {
-				color: #67e8f9;
+				color: var(--premium-accent);
 				cursor: pointer;
 				font: inherit;
 			}
 			.category-pill strong {
-				color: #f8fafc;
+				color: var(--premium-text);
 			}
 			.category-pill span,
 			.tag-pill {
-				color: #bae6fd;
+				color: var(--premium-accent-soft);
 				font-size: 0.85rem;
 			}
 			.about-body {
@@ -682,21 +686,21 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 				gap: 0.6rem;
 			}
 			.button {
-				background: linear-gradient(135deg, #0891b2, #14b8a6);
-				border: 1px solid rgba(125, 211, 252, 36%);
-				border-radius: 8px;
-				color: white;
+				background: linear-gradient(135deg, var(--premium-accent-strong), var(--premium-gold));
+				border: 1px solid var(--premium-border-strong);
+				border-radius: 10px;
+				color: var(--premium-ink);
 				display: inline-block;
 				font-weight: 700;
 				padding: 0.46rem 0.78rem;
 				text-decoration: none;
 			}
 			.button.secondary {
-				background: rgba(15, 23, 42, 80%);
-				color: #67e8f9;
+				background: rgba(var(--premium-ink-rgb), 58%);
+				color: var(--premium-accent);
 			}
 			.empty-state {
-				color: #94a3b8;
+				color: var(--premium-muted);
 			}
 			@keyframes panelEnter {
 				from {
@@ -787,8 +791,8 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 	</head>
 	<body>
 		<Header />
-		<main class="space-home tech-shell visual-grid" data-space-home>
-			<section class="profile-hero surface-glow" aria-labelledby="space-title">
+		<main class="space-home tech-shell visual-grid premium-shell ambient-mesh" data-space-home>
+			<section class="profile-hero surface-glow executive-glass luxe-border" aria-labelledby="space-title">
 				<div class="profile-cover">
 					<p class="profile-kicker"><span class="signal-dot" aria-hidden="true"></span>entry developer online</p>
 					<h1 id="space-title" class="profile-name">{profileName}</h1>
@@ -822,7 +826,7 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 			</section>
 
 			<section class="space-layout" aria-label="博客空间内容">
-				<nav class="space-sidebar" aria-label="空间导航" role="tablist">
+				<nav class="space-sidebar executive-glass" aria-label="空间导航" role="tablist">
 					{
 						navItems.map((item, index) => (
 							<button
@@ -841,7 +845,7 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 				</nav>
 
 				<div class="space-content">
-					<article class="space-panel soft-reveal is-active" id="panel-home" role="tabpanel" data-panel="home">
+					<article class="space-panel soft-reveal is-active executive-glass" id="panel-home" role="tabpanel" data-panel="home">
 						<div class="panel-heading">
 							<div>
 								<h2>入门开发者空间</h2>
@@ -850,21 +854,21 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 							<a class="panel-link focus-ring" href={withBase('/blog/')}>查看全部文章</a>
 						</div>
 						<div class="feature-grid">
-							<div class="feature-item">
+							<div class="feature-item executive-glass">
 								<h3>学习路线</h3>
 								<p>把 HTML、CSS、JavaScript、Astro 和 Git 的学习顺序拆成能执行的小任务。</p>
 							</div>
-							<div class="feature-item">
+							<div class="feature-item executive-glass">
 								<h3>项目复盘</h3>
 								<p>每做完一个页面或功能，就记录目标、实现、问题和下一步改进。</p>
 							</div>
-							<div class="feature-item">
+							<div class="feature-item executive-glass">
 								<h3>工具配置</h3>
 								<p>记录 VS Code、GitHub、Chrome 调试和部署配置，方便以后快速复用。</p>
 							</div>
 						</div>
 						<div class="dashboard-grid" aria-label="学习状态面板">
-							<section class="dashboard-card" aria-labelledby="progress-title">
+							<section class="dashboard-card executive-glass" aria-labelledby="progress-title">
 								<h3 id="progress-title">学习进度</h3>
 								<ul class="progress-list">
 									{
@@ -888,7 +892,7 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 									}
 								</ul>
 							</section>
-							<section class="dashboard-card" aria-labelledby="plan-title">
+							<section class="dashboard-card executive-glass" aria-labelledby="plan-title">
 								<h3 id="plan-title">近期计划</h3>
 								<ol class="plan-list">
 									{currentPlans.map((plan) => <li>{plan}</li>)}
@@ -898,7 +902,7 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 						<ul class="post-list">
 							{
 								recentPosts.map((post) => (
-									<li class="post-item">
+									<li class="post-item executive-glass">
 										<p class="post-meta">
 											{post.data.category} / <FormattedDate date={post.data.pubDate} />
 										</p>
@@ -910,7 +914,7 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 						</ul>
 					</article>
 
-					<article class="space-panel soft-reveal" id="panel-posts" role="tabpanel" data-panel="posts" hidden>
+					<article class="space-panel soft-reveal executive-glass" id="panel-posts" role="tabpanel" data-panel="posts" hidden>
 						<div class="panel-heading">
 							<div>
 								<h2>发布内容</h2>
@@ -938,7 +942,7 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 									{
 										posts.map((post) => (
 											<li
-												class="post-item"
+												class="post-item executive-glass"
 												data-post-item
 												data-category={post.data.category}
 												data-search={`${post.data.title} ${post.data.description} ${post.data.category} ${post.data.tags.join(' ')}`}
@@ -959,7 +963,7 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 						<p class="empty-state" data-filter-empty hidden>没有匹配文章，试试换个关键词或分类。</p>
 					</article>
 
-					<article class="space-panel soft-reveal" id="panel-categories" role="tabpanel" data-panel="categories" hidden>
+					<article class="space-panel soft-reveal executive-glass" id="panel-categories" role="tabpanel" data-panel="categories" hidden>
 						<div class="panel-heading">
 							<div>
 								<h2>知识模块</h2>
@@ -992,7 +996,7 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 						}
 					</article>
 
-					<article class="space-panel soft-reveal" id="panel-about" role="tabpanel" data-panel="about" hidden>
+					<article class="space-panel soft-reveal executive-glass" id="panel-about" role="tabpanel" data-panel="about" hidden>
 						<div class="panel-heading">
 							<div>
 								<h2>关于这个空间</h2>
@@ -1010,7 +1014,7 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 								<div class="project-grid">
 									{
 										projectCards.map((project) => (
-											<article class="project-card" data-project-card>
+											<article class="project-card executive-glass" data-project-card>
 												<div class="project-head">
 													<h4>{project.name}</h4>
 													<span class="project-status">{project.status}</span>
@@ -1027,7 +1031,7 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 									{techStack.map((tech) => <li class="tag-pill">{tech}</li>)}
 								</ul>
 							</section>
-							<section class="interaction-card" aria-labelledby="interaction-title" data-local-interactions>
+							<section class="interaction-card executive-glass" aria-labelledby="interaction-title" data-local-interactions>
 								<h3 id="interaction-title">访客互动台</h3>
 								<p class="interaction-note">
 									这里先做静态博客可用的本地互动：访客昵称、本地点赞、本地收藏和留言草稿都会保存在当前浏览器。

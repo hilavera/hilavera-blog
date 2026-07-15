@@ -60,7 +60,7 @@ const {
 	]}
 >
 	<article class="article-shell">
-		<div class="article-main surface-card">
+		<div class="article-main surface-card executive-glass luxe-border">
 			{
 				heroImage && (
 					<div class="article-hero-image">
@@ -96,7 +96,7 @@ const {
 		</div>
 
 		<aside class="article-aside" aria-label="文章辅助信息">
-			<section class="surface-card article-panel article-toc">
+			<section class="surface-card article-panel article-toc executive-glass">
 				<span class="card-kicker">Outline</span>
 				<h2>本篇速览</h2>
 				{
@@ -112,7 +112,7 @@ const {
 				}
 			</section>
 
-			<section class="surface-card article-panel">
+			<section class="surface-card article-panel executive-glass">
 				<span class="card-kicker">Next step</span>
 				<h2>阅读建议</h2>
 				<p>先看目标和问题，再看操作过程，最后对照验证方式。这样读技术记录更容易复用。</p>
@@ -120,7 +120,7 @@ const {
 
 			{
 				relatedPosts.length > 0 && (
-					<section class="surface-card article-panel related-reading">
+					<section class="surface-card article-panel related-reading executive-glass">
 						<span class="card-kicker">Related</span>
 						<h2>相关阅读</h2>
 						<ul>
@@ -140,13 +140,13 @@ const {
 	<nav class="article-nav" aria-label="上一篇和下一篇">
 		{
 			olderPost ? (
-				<a class="surface-card article-nav-card" href={olderPost.href}>
+				<a class="surface-card article-nav-card executive-glass" href={olderPost.href}>
 					<span class="card-kicker">上一篇</span>
 					<strong>{olderPost.title}</strong>
 					<small>{olderPost.description}</small>
 				</a>
 			) : (
-				<a class="surface-card article-nav-card" href={withBase('/blog/')}>
+				<a class="surface-card article-nav-card executive-glass" href={withBase('/blog/')}>
 					<span class="card-kicker">文章索引</span>
 					<strong>回到开发日志索引</strong>
 					<small>从分类、标签和发布时间继续浏览。</small>
@@ -155,13 +155,13 @@ const {
 		}
 		{
 			newerPost ? (
-				<a class="surface-card article-nav-card" href={newerPost.href}>
+				<a class="surface-card article-nav-card executive-glass" href={newerPost.href}>
 					<span class="card-kicker">更新一篇</span>
 					<strong>{newerPost.title}</strong>
 					<small>{newerPost.description}</small>
 				</a>
 			) : (
-				<a class="surface-card article-nav-card" href={withBase('/categories/')}>
+				<a class="surface-card article-nav-card executive-glass" href={withBase('/categories/')}>
 					<span class="card-kicker">分类地图</span>
 					<strong>按主题继续阅读</strong>
 					<small>查看学习笔记、项目复盘和工具配置。</small>
@@ -187,7 +187,7 @@ const {
 			transform: none;
 		}
 		.article-hero-image {
-			border-bottom: 1px solid rgba(125, 211, 252, 18%);
+			border-bottom: 1px solid var(--premium-border);
 			max-height: 340px;
 			overflow: hidden;
 		}
@@ -205,22 +205,22 @@ const {
 			padding: 0 1.05rem;
 		}
 		.article-meta {
-			border-bottom: 1px solid rgba(125, 211, 252, 12%);
-			color: #94a3b8;
+			border-bottom: 1px solid var(--premium-border);
+			color: var(--premium-muted);
 			font-size: 0.88rem;
 			justify-content: space-between;
 			padding-bottom: 0.72rem;
 			padding-top: 0.9rem;
 		}
 		.article-meta a {
-			color: #67e8f9;
+			color: var(--premium-accent);
 			font-weight: 700;
 			text-decoration: none;
 		}
 		.article-meta a:hover,
 		.related-reading a:hover,
 		.article-nav-card:hover strong {
-			color: #a7f3d0;
+			color: var(--premium-gold-soft);
 		}
 		.article-tags {
 			padding-top: 0.9rem;
@@ -229,61 +229,61 @@ const {
 			text-decoration: none;
 		}
 		.article-prose {
-			color: #dbeafe;
+			color: var(--premium-soft);
 			font-size: 1rem;
 			line-height: 1.78;
 			padding: 0.2rem 1.05rem 1.25rem;
 		}
 		.article-prose :where(h2, h3) {
-			color: #f8fafc;
+			color: var(--premium-text);
 			line-height: 1.28;
 			margin: 1.45rem 0 0.5rem;
 		}
 		.article-prose h2 {
-			border-top: 1px solid rgba(125, 211, 252, 14%);
+			border-top: 1px solid var(--premium-border);
 			font-size: 1.35rem;
 			padding-top: 1rem;
 		}
 		.article-prose h3 {
-			color: #bae6fd;
+			color: var(--premium-accent-soft);
 			font-size: 1.08rem;
 		}
 		.article-prose :where(p, li) {
-			color: #cbd5e1;
+			color: var(--premium-soft);
 		}
 		.article-prose a {
-			color: #67e8f9;
+			color: var(--premium-accent);
 			font-weight: 700;
 		}
 		.article-prose :where(ul, ol) {
 			padding-left: 1.35rem;
 		}
 		.article-prose blockquote {
-			background: rgba(8, 47, 73, 28%);
-			border-left: 3px solid #22d3ee;
+			background: rgba(214, 181, 109, 9%);
+			border-left: 3px solid var(--premium-gold);
 			border-radius: 8px;
 			margin: 1rem 0;
 			padding: 0.7rem 0.9rem;
 		}
 		.article-prose pre {
-			background: rgba(2, 6, 23, 82%);
-			border: 1px solid rgba(125, 211, 252, 16%);
-			border-radius: 8px;
+			background: rgba(var(--premium-ink-rgb), 82%);
+			border: 1px solid var(--premium-border);
+			border-radius: var(--premium-radius);
 			overflow-x: auto;
 			padding: 0.85rem;
 		}
 		.article-prose code {
-			background: rgba(8, 47, 73, 45%);
-			border: 1px solid rgba(125, 211, 252, 14%);
+			background: rgba(56, 189, 248, 10%);
+			border: 1px solid var(--premium-border);
 			border-radius: 6px;
-			color: #bae6fd;
+			color: var(--premium-accent-soft);
 			font-size: 0.9em;
 			padding: 0.1rem 0.3rem;
 		}
 		.article-prose pre code {
 			background: transparent;
 			border: 0;
-			color: #dbeafe;
+			color: var(--premium-accent-soft);
 			padding: 0;
 		}
 		.article-aside {
@@ -315,12 +315,12 @@ const {
 			gap: 0.15rem;
 		}
 		.related-reading a {
-			color: #f8fafc;
+			color: var(--premium-text);
 			font-weight: 700;
 			text-decoration: none;
 		}
 		.related-reading span {
-			color: #67e8f9;
+			color: var(--premium-gold-soft);
 			font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 			font-size: 0.75rem;
 			text-transform: uppercase;
@@ -338,12 +338,12 @@ const {
 			text-decoration: none;
 		}
 		.article-nav-card strong {
-			color: #f8fafc;
+			color: var(--premium-text);
 			font-size: 1.02rem;
 			line-height: 1.35;
 		}
 		.article-nav-card small {
-			color: #94a3b8;
+			color: var(--premium-muted);
 			line-height: 1.55;
 		}
 		@media (max-width: 900px) {

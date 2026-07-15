@@ -6,7 +6,12 @@ import { withBase } from '../consts';
 
 <header>
 	<nav>
-		<h2><a href={withBase('/')}>{SITE_TITLE}</a></h2>
+		<h2>
+			<a class="brand" href={withBase('/')}>
+				<span class="brand-mark" aria-hidden="true">hv</span>
+				<span>{SITE_TITLE}</span>
+			</a>
+		</h2>
 		<div class="internal-links">
 			<HeaderLink href="/">首页</HeaderLink>
 			<HeaderLink href="/blog">文章</HeaderLink>
@@ -19,9 +24,15 @@ import { withBase } from '../consts';
 	header {
 		margin: 0;
 		padding: 0 1em;
-		background: rgba(2, 6, 23, 92%);
-		border-bottom: 1px solid rgba(125, 211, 252, 16%);
-		box-shadow: 0 8px 32px rgba(2, 6, 23, 28%);
+		background:
+			linear-gradient(180deg, rgba(var(--premium-ink-rgb), 88%), rgba(var(--premium-ink-rgb), 68%)),
+			rgba(var(--premium-ink-rgb), 82%);
+		border-bottom: 1px solid var(--premium-border);
+		box-shadow: 0 12px 42px rgba(var(--premium-ink-rgb), 42%);
+		backdrop-filter: blur(18px);
+		position: sticky;
+		top: 0;
+		z-index: 20;
 	}
 	h2 {
 		margin: 0;
@@ -37,20 +48,46 @@ import { withBase } from '../consts';
 		align-items: center;
 		justify-content: space-between;
 		gap: 1em;
+		margin: auto;
+		max-width: 1100px;
+	}
+	.brand {
+		align-items: center;
+		color: var(--premium-text);
+		display: inline-flex;
+		gap: 0.55rem;
+	}
+	.brand-mark {
+		align-items: center;
+		background:
+			linear-gradient(135deg, rgba(214, 181, 109, 26%), rgba(56, 189, 248, 16%)),
+			rgba(255, 255, 255, 6%);
+		border: 1px solid var(--premium-border-strong);
+		border-radius: 10px;
+		color: var(--premium-gold-soft);
+		display: inline-flex;
+		font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+		font-size: 0.72rem;
+		height: 1.85rem;
+		justify-content: center;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		width: 1.85rem;
+		box-shadow: var(--premium-inset), 0 0 20px rgba(214, 181, 109, 12%);
 	}
 	nav a {
-		padding: 1em 0.5em;
-		color: #cbd5e1;
-		border-bottom: 4px solid transparent;
+		padding: 1em 0.55em;
+		color: var(--premium-soft);
+		border-bottom: 2px solid transparent;
 		text-decoration: none;
 	}
 	nav a.active {
 		text-decoration: none;
-		border-bottom-color: #22d3ee;
-		color: #f8fafc;
+		border-bottom-color: var(--premium-gold);
+		color: var(--premium-text);
 	}
 	nav a:hover {
-		color: #67e8f9;
+		color: var(--premium-gold-soft);
 	}
 	.internal-links {
 		display: flex;

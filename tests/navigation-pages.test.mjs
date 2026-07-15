@@ -24,7 +24,15 @@ const techPageLayoutSource = readFileSync(new URL('../src/layouts/TechPage.astro
 test('top navigation pages share the dark tech page shell', () => {
 	for (const { html, source } of Object.values(pages)) {
 		const combinedSource = `${source}\n${techPageLayoutSource}`;
-		for (const className of ['tech-page', 'page-hero', 'surface-card', 'density-grid']) {
+		for (const className of [
+			'tech-page',
+			'page-hero',
+			'surface-card',
+			'density-grid',
+			'premium-shell',
+			'executive-glass',
+			'luxe-border',
+		]) {
 			assert.match(html, new RegExp(className));
 			assert.match(combinedSource, new RegExp(className));
 		}

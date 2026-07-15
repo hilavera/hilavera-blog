@@ -18,7 +18,14 @@ const routeSource = readFileSync(
 const blogIndexHtml = readFileSync(new URL('../dist/blog/index.html', import.meta.url), 'utf8');
 
 test('article detail pages use the dark tech reading shell', () => {
-	for (const className of ['article-shell', 'article-main', 'article-prose', 'article-aside']) {
+	for (const className of [
+		'article-shell',
+		'article-main',
+		'article-prose',
+		'article-aside',
+		'executive-glass',
+		'luxe-border',
+	]) {
 		assert.match(articleHtml, new RegExp(className));
 		assert.match(layoutSource, new RegExp(className));
 	}

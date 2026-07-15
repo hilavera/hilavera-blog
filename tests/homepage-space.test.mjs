@@ -14,9 +14,9 @@ test('home page renders the personal space layout shell', () => {
 	assert.match(html, /<h1[^>]*>\s*hilavera/);
 	assert.match(html, />hilavera 的博客</);
 	assert.doesNotMatch(html, /Hila 的博客/);
-	assert.match(html, /class="space-layout"/);
-	assert.match(html, /class="space-sidebar"/);
-	assert.match(html, /class="space-content"/);
+	assert.match(html, /class="[^"]*space-layout[^"]*"/);
+	assert.match(html, /class="[^"]*space-sidebar[^"]*"/);
+	assert.match(html, /class="[^"]*space-content[^"]*"/);
 });
 
 test('home page wires left navigation to right side panels', () => {
@@ -64,11 +64,25 @@ test('home page includes lightweight blog space enhancements', () => {
 });
 
 test('home page includes visual polish layers without changing layout', () => {
-	for (const className of ['visual-grid', 'surface-glow', 'soft-reveal', 'focus-ring']) {
+	for (const className of [
+		'visual-grid',
+		'surface-glow',
+		'soft-reveal',
+		'focus-ring',
+		'premium-shell',
+		'executive-glass',
+		'luxe-border',
+		'ambient-mesh',
+	]) {
 		assert.match(source, new RegExp(className));
 	}
 
-	for (const motionRule of ['@keyframes panelEnter', '@keyframes scanDrift', '@media (prefers-reduced-motion: reduce)']) {
+	for (const motionRule of [
+		'@keyframes panelEnter',
+		'@keyframes scanDrift',
+		'@media (prefers-reduced-motion: reduce)',
+		'--premium-gold',
+	]) {
 		assert.match(source, new RegExp(motionRule.replace(/[()]/g, '\\$&')));
 	}
 });
