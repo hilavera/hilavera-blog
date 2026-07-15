@@ -893,6 +893,33 @@ const commandItems = [
 				margin: 0.8rem 0 0;
 				text-align: center;
 			}
+			.action-toast {
+				background: var(--premium-panel-strong);
+				border: 1px solid var(--premium-border-strong);
+				border-radius: 10px;
+				bottom: 1rem;
+				box-shadow: var(--premium-shadow);
+				color: var(--premium-text);
+				left: 50%;
+				margin: 0;
+				max-width: calc(100% - 2rem);
+				opacity: 0;
+				padding: 0.62rem 0.82rem;
+				pointer-events: none;
+				position: fixed;
+				transform: translate(-50%, 8px);
+				transition:
+					opacity 160ms ease,
+					transform 160ms ease,
+					visibility 160ms ease;
+				visibility: hidden;
+				z-index: 20;
+			}
+			.action-toast.is-visible {
+				opacity: 1;
+				transform: translate(-50%, 0);
+				visibility: visible;
+			}
 			@keyframes panelEnter {
 				from {
 					opacity: 0;
@@ -915,7 +942,8 @@ const commandItems = [
 				}
 				.command-trigger,
 				.command-item,
-				.status-chip {
+				.status-chip,
+				.action-toast {
 					transition: none;
 				}
 			}
@@ -1252,6 +1280,20 @@ const commandItems = [
 										></textarea>
 									</label>
 									<div class="interaction-field full">
+										<span class="tool-label">访客操作</span>
+										<div class="interaction-actions">
+											<button class="interaction-button focus-ring" type="button" data-save-draft-button>
+												保存草稿
+											</button>
+											<button class="interaction-button focus-ring" type="button" data-share-button>
+												分享页面
+											</button>
+											<button class="interaction-button focus-ring" type="button" data-copy-link-button>
+												复制链接
+											</button>
+										</div>
+									</div>
+									<div class="interaction-field full">
 										<span class="tool-label">草稿预览 <strong class="local-badge">LOCAL ONLY</strong></span>
 										<p class="comment-preview" data-comment-preview>还没有留言草稿。</p>
 									</div>
@@ -1320,6 +1362,7 @@ const commandItems = [
 					<p class="command-empty" data-command-empty hidden>没有匹配结果，换个关键词试试。</p>
 				</div>
 			</dialog>
+			<p class="action-toast" data-toast role="status" aria-live="polite" aria-atomic="true"></p>
 		</main>
 		<Footer />
 		<script is:inline>
@@ -1344,7 +1387,13 @@ const commandItems = [
 			const favoriteButton = document.querySelector('[data-favorite-button]');
 			const commentDraft = document.querySelector('[data-comment-draft]');
 			const commentPreview = document.querySelector('[data-comment-preview]');
+			const saveDraftButton = document.querySelector('[data-save-draft-button]');
+			const shareButton = document.querySelector('[data-share-button]');
+			const copyLinkButton = document.querySelector('[data-copy-link-button]');
+			const toast = document.querySelector('[data-toast]');
 			const visitorStorageKey = 'hilavera-blog-visitor-state';
+			let memoryVisitorState = { name: '', liked: false, favorite: false, likes: 0, comment: '' };
+			let toastTimer;
 			let activeCommandIndex = 0;
 
 			function normalizeText(value) {
@@ -1411,16 +1460,22 @@ const commandItems = [
 			function readVisitorState() {
 				try {
 					const savedState = window.localStorage.getItem(visitorStorageKey);
-					return savedState
-						? JSON.parse(savedState)
-						: { name: '', liked: false, favorite: false, likes: 0, comment: '' };
+					const parsedState = savedState ? JSON.parse(savedState) : null;
+					return parsedState && typeof parsedState === 'object'
+						? { ...memoryVisitorState, ...parsedState }
+						: memoryVisitorState;
 				} catch {
-					return { name: '', liked: false, favorite: false, likes: 0, comment: '' };
+					return memoryVisitorState;
 				}
 			}
 
 			function writeVisitorState(state) {
-				window.localStorage.setItem(visitorStorageKey, JSON.stringify(state));
+				memoryVisitorState = state;
+				try {
+					window.localStorage.setItem(visitorStorageKey, JSON.stringify(state));
+				} catch {
+					// Keep the in-memory state available for this page visit.
+				}
 			}
 
 			function getVisitorStateFromInputs() {
@@ -1449,6 +1504,47 @@ const commandItems = [
 				const nextState = getVisitorStateFromInputs();
 				writeVisitorState(nextState);
 				updateVisitorState(nextState);
+			}
+
+			function showToast(message) {
+				if (!toast) return;
+				window.clearTimeout(toastTimer);
+				toast.textContent = message;
+				toast.classList.add('is-visible');
+				toastTimer = window.setTimeout(() => {
+					toast.classList.remove('is-visible');
+				}, 2200);
+			}
+
+			async function copyCurrentUrl() {
+				const url = window.location.href;
+				try {
+					await navigator.clipboard.writeText(url);
+				} catch {
+					const fallback = document.createElement('textarea');
+					fallback.value = url;
+					fallback.setAttribute('readonly', '');
+					fallback.style.position = 'fixed';
+					fallback.style.opacity = '0';
+					document.body.append(fallback);
+					fallback.select();
+					document.execCommand('copy');
+					fallback.remove();
+				}
+				showToast('链接已复制。');
+			}
+
+			async function shareCurrentPage() {
+				if (navigator.share) {
+					try {
+						await navigator.share({ title: document.title, url: window.location.href });
+						showToast('分享面板已打开。');
+						return;
+					} catch (error) {
+						if (error?.name === 'AbortError') return;
+					}
+				}
+				await copyCurrentUrl();
 			}
 
 			function focusPanelHeading(panelId) {
@@ -1557,6 +1653,12 @@ const commandItems = [
 			categoryFilter?.addEventListener('change', filterPosts);
 			visitorName?.addEventListener('input', saveCommentDraft);
 			commentDraft?.addEventListener('input', saveCommentDraft);
+			saveDraftButton?.addEventListener('click', () => {
+				saveCommentDraft();
+				showToast('留言草稿已保存在当前浏览器。');
+			});
+			shareButton?.addEventListener('click', shareCurrentPage);
+			copyLinkButton?.addEventListener('click', copyCurrentUrl);
 
 			likeButton?.addEventListener('click', () => {
 				const nextState = getVisitorStateFromInputs();
@@ -1564,6 +1666,7 @@ const commandItems = [
 				nextState.likes = nextState.liked ? 1 : 0;
 				writeVisitorState(nextState);
 				updateVisitorState(nextState);
+				showToast(nextState.liked ? '已在当前浏览器点赞。' : '已取消本地点赞。');
 			});
 
 			favoriteButton?.addEventListener('click', () => {
@@ -1571,6 +1674,7 @@ const commandItems = [
 				nextState.favorite = !nextState.favorite;
 				writeVisitorState(nextState);
 				updateVisitorState(nextState);
+				showToast(nextState.favorite ? '已加入本地收藏。' : '已取消本地收藏。');
 			});
 
 			categoryShortcuts.forEach((button) => {

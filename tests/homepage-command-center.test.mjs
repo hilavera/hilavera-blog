@@ -52,3 +52,30 @@ test('panel state follows browser history', () => {
 	assert.match(source, /window\.addEventListener\('hashchange'/);
 	assert.match(source, /updateHash: false/);
 });
+
+test('visitor actions expose share copy save and toast feedback', () => {
+	for (const hook of [
+		'data-share-button',
+		'data-copy-link-button',
+		'data-save-draft-button',
+		'data-toast',
+	]) {
+		assert.match(html, new RegExp(hook));
+	}
+
+	assert.match(html, /role="status"/);
+	assert.match(html, /aria-live="polite"/);
+	assert.match(source, /function showToast/);
+	assert.match(source, /async function copyCurrentUrl/);
+	assert.match(source, /async function shareCurrentPage/);
+	assert.match(source, /navigator\.share/);
+	assert.match(source, /navigator\.clipboard/);
+});
+
+test('visitor state writes fall back when local storage is unavailable', () => {
+	assert.match(source, /let memoryVisitorState/);
+	assert.match(
+		source,
+		/function writeVisitorState\(state\)[\s\S]*memoryVisitorState = state[\s\S]*localStorage\.setItem[\s\S]*catch \{/,
+	);
+});
