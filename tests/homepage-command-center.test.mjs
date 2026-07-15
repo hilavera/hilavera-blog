@@ -38,6 +38,10 @@ test('command center includes panels categories and posts', () => {
 	}
 });
 
+test('command search hides unmatched flex items', () => {
+	assert.match(source, /\.command-item\[hidden\]\s*{\s*display:\s*none;/);
+});
+
 test('status cards and sidebar support direct keyboard navigation', () => {
 	assert.match(html, /data-status-target="home"/);
 	assert.match(html, /data-status-target="posts"/);
