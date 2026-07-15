@@ -1,16 +1,13 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import test from 'node:test';
 
 const html = readFileSync(new URL('../dist/index.html', import.meta.url), 'utf8');
 const source = readFileSync(new URL('../src/pages/index.astro', import.meta.url), 'utf8');
-const articleSources = [
-	'astro-blog-setup.md',
-	'hello-blog.md',
-	'life-weekly.md',
-	'markdown-writing.md',
-	'reading-note-template.md',
-].map((file) => readFileSync(new URL(`../src/content/blog/${file}`, import.meta.url), 'utf8'));
+const contentDirectory = new URL('../src/content/blog/', import.meta.url);
+const articleSources = readdirSync(contentDirectory)
+	.filter((file) => file.endsWith('.md') || file.endsWith('.mdx'))
+	.map((file) => readFileSync(new URL(file, contentDirectory), 'utf8'));
 
 test('home page renders the personal space layout shell', () => {
 	assert.match(html, /data-space-home/);
