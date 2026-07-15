@@ -94,7 +94,6 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 				z-index: 0;
 			}
 			.visual-grid::before {
-				animation: scanDrift 18s linear infinite;
 				background:
 					repeating-linear-gradient(
 						0deg,
@@ -110,7 +109,6 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 				background:
 					linear-gradient(90deg, transparent, rgba(214, 181, 109, 10%), transparent),
 					radial-gradient(ellipse at 50% 0%, rgba(56, 189, 248, 10%), transparent 58%);
-				filter: blur(0.2px);
 				opacity: 0.55;
 			}
 			.profile-hero,
@@ -177,10 +175,9 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 				text-transform: uppercase;
 			}
 			.signal-dot {
-				animation: signalPulse 2.6s ease-in-out infinite;
 				background: #22c55e;
 				border-radius: 999px;
-				box-shadow: 0 0 18px rgba(34, 197, 94, 90%);
+				box-shadow: 0 0 12px rgba(34, 197, 94, 62%);
 				display: inline-block;
 				height: 0.55rem;
 				width: 0.55rem;
@@ -252,7 +249,6 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 					linear-gradient(180deg, var(--premium-panel-strong), rgba(10, 16, 30, 78%));
 				border: 1px solid var(--premium-border);
 				box-shadow: var(--premium-shadow), var(--premium-inset);
-				backdrop-filter: blur(18px);
 			}
 			.space-sidebar {
 				border-radius: var(--premium-radius);
@@ -712,30 +708,7 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 					transform: translateY(0);
 				}
 			}
-			@keyframes scanDrift {
-				from {
-					background-position:
-						0 0,
-						0 0;
-				}
-				to {
-					background-position:
-						0 54px,
-						160px 0;
-				}
-			}
-			@keyframes signalPulse {
-				0%,
-				100% {
-					box-shadow: 0 0 12px rgba(34, 197, 94, 72%);
-				}
-				50% {
-					box-shadow: 0 0 24px rgba(34, 197, 94, 95%);
-				}
-			}
 			@media (prefers-reduced-motion: reduce) {
-				.visual-grid::before,
-				.signal-dot,
 				.soft-reveal {
 					animation: none;
 				}

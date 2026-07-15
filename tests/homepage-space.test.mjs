@@ -79,7 +79,6 @@ test('home page includes visual polish layers without changing layout', () => {
 
 	for (const motionRule of [
 		'@keyframes panelEnter',
-		'@keyframes scanDrift',
 		'@media (prefers-reduced-motion: reduce)',
 		'--premium-gold',
 	]) {

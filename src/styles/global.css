@@ -34,8 +34,8 @@
 	--premium-gold: #d6b56d;
 	--premium-gold-soft: #f8e7b5;
 	--premium-radius: 12px;
-	--premium-shadow: 0 24px 80px rgba(var(--premium-ink-rgb), 52%);
-	--premium-glow: 0 0 36px rgba(56, 189, 248, 18%);
+	--premium-shadow: 0 12px 34px rgba(var(--premium-ink-rgb), 36%);
+	--premium-glow: 0 0 18px rgba(56, 189, 248, 10%);
 	--premium-inset: inset 0 1px 0 rgba(255, 255, 255, 10%);
 }
 body {
@@ -152,11 +152,10 @@ hr {
 }
 .executive-glass {
 	background:
-		linear-gradient(145deg, rgba(255, 255, 255, 8%), transparent 34%),
-		linear-gradient(180deg, var(--premium-panel-strong), rgba(10, 16, 30, 78%));
+		linear-gradient(145deg, rgba(255, 255, 255, 6%), transparent 34%),
+		linear-gradient(180deg, rgba(12, 19, 36, 94%), rgba(10, 16, 30, 90%));
 	border: 1px solid var(--premium-border);
-	box-shadow: var(--premium-shadow), var(--premium-inset);
-	backdrop-filter: blur(18px);
+	box-shadow: var(--premium-inset);
 }
 .luxe-border {
 	position: relative;
