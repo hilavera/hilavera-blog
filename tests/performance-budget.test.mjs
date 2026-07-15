@@ -38,3 +38,16 @@ test('visual system keeps lightweight premium styling hooks', () => {
 		assert.match(combinedStyles, new RegExp(expectedToken.replace(/[()]/g, '\\$&')));
 	}
 });
+
+test('homepage interactions avoid pointer tracking and infinite motion', () => {
+	const homepage = readFileSync(new URL('../src/pages/index.astro', import.meta.url), 'utf8');
+
+	for (const expensivePattern of [
+		/pointermove/,
+		/mousemove/,
+		/requestAnimationFrame/,
+		/animation-iteration-count:\s*infinite/,
+	]) {
+		assert.doesNotMatch(homepage, expensivePattern);
+	}
+});
