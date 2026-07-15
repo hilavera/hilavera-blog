@@ -62,6 +62,30 @@ const projectCards = [
 ];
 
 const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'GitHub Pages', 'Chrome DevTools'];
+
+const commandItems = [
+	...navItems.map((item) => ({
+		kind: 'panel',
+		label: item.label,
+		description: item.summary,
+		target: item.id,
+		search: `${item.label} ${item.summary}`,
+	})),
+	...categoryCounts.map(({ category, count }) => ({
+		kind: 'category',
+		label: category,
+		description: `${count} 篇文章`,
+		target: category,
+		search: `${category} 分类 ${count} 篇文章`,
+	})),
+	...posts.map((post) => ({
+		kind: 'post',
+		label: post.data.title,
+		description: post.data.description,
+		href: withBase(`/blog/${post.id}/`),
+		search: `${post.data.title} ${post.data.description} ${post.data.category} ${post.data.tags.join(' ')}`,
+	})),
+];
 ---
 
 <!doctype html>
@@ -698,6 +722,164 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 			.empty-state {
 				color: var(--premium-muted);
 			}
+			.command-trigger {
+				align-items: center;
+				background:
+					linear-gradient(135deg, rgba(214, 181, 109, 16%), rgba(56, 189, 248, 10%)),
+					rgba(var(--premium-ink-rgb), 58%);
+				border: 1px solid var(--premium-border-strong);
+				border-radius: 10px;
+				color: var(--premium-text);
+				cursor: pointer;
+				display: inline-flex;
+				font: inherit;
+				font-weight: 700;
+				gap: 0.7rem;
+				margin-top: 1rem;
+				padding: 0.55rem 0.75rem;
+				transition:
+					background 160ms ease,
+					border-color 160ms ease,
+					transform 160ms ease;
+			}
+			.command-trigger:hover {
+				background:
+					linear-gradient(135deg, rgba(214, 181, 109, 24%), rgba(56, 189, 248, 16%)),
+					rgba(var(--premium-ink-rgb), 64%);
+				border-color: rgba(214, 181, 109, 62%);
+				transform: translateY(-1px);
+			}
+			.command-trigger kbd,
+			.command-close,
+			.command-item em,
+			.command-kicker {
+				color: var(--premium-accent);
+				font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+			}
+			.command-trigger kbd {
+				background: rgba(var(--premium-ink-rgb), 64%);
+				border: 1px solid var(--premium-border);
+				border-radius: 7px;
+				font-size: 0.72rem;
+				padding: 0.12rem 0.38rem;
+			}
+			.command-dialog {
+				background: transparent;
+				border: 0;
+				color: var(--premium-soft);
+				max-height: min(680px, calc(100vh - 2rem));
+				max-width: min(680px, calc(100% - 2rem));
+				padding: 0;
+				width: 100%;
+			}
+			.command-dialog::backdrop {
+				background: rgba(2, 6, 18, 76%);
+			}
+			.command-shell {
+				background:
+					linear-gradient(145deg, rgba(255, 255, 255, 7%), transparent 32%),
+					var(--premium-panel-strong);
+				border: 1px solid var(--premium-border-strong);
+				border-radius: var(--premium-radius);
+				box-shadow: var(--premium-shadow), var(--premium-inset);
+				overflow: hidden;
+				padding: 1rem;
+			}
+			.command-header {
+				align-items: start;
+				display: flex;
+				gap: 1rem;
+				justify-content: space-between;
+			}
+			.command-header h2 {
+				color: var(--premium-text);
+				font-size: 1.45rem;
+				margin: 0;
+			}
+			.command-kicker {
+				font-size: 0.68rem;
+				font-weight: 700;
+				letter-spacing: 0.08em;
+				margin: 0 0 0.2rem;
+			}
+			.command-close {
+				background: rgba(var(--premium-ink-rgb), 58%);
+				border: 1px solid var(--premium-border);
+				border-radius: 8px;
+				cursor: pointer;
+				font-size: 0.72rem;
+				font-weight: 700;
+				padding: 0.38rem 0.48rem;
+			}
+			.command-search-field {
+				display: grid;
+				gap: 0.3rem;
+				margin-top: 0.85rem;
+			}
+			.command-search-field input {
+				background: rgba(var(--premium-ink-rgb), 68%);
+				border: 1px solid var(--premium-border);
+				border-radius: 10px;
+				color: var(--premium-text);
+				font: inherit;
+				min-height: 2.7rem;
+				padding: 0.55rem 0.68rem;
+			}
+			.command-list {
+				display: grid;
+				gap: 0.35rem;
+				list-style: none;
+				margin: 0.8rem 0 0;
+				max-height: 390px;
+				overflow: auto;
+				padding: 0;
+			}
+			.command-item {
+				align-items: center;
+				background: transparent;
+				border: 1px solid transparent;
+				border-radius: 10px;
+				color: var(--premium-soft);
+				cursor: pointer;
+				display: flex;
+				font: inherit;
+				gap: 1rem;
+				justify-content: space-between;
+				padding: 0.62rem;
+				text-align: left;
+				transition:
+					background 140ms ease,
+					border-color 140ms ease;
+				width: 100%;
+			}
+			.command-item[aria-selected='true'],
+			.command-item:hover {
+				background: rgba(56, 189, 248, 10%);
+				border-color: var(--premium-border-strong);
+			}
+			.command-item span,
+			.command-item small {
+				display: block;
+			}
+			.command-item strong {
+				color: var(--premium-text);
+			}
+			.command-item small {
+				color: var(--premium-muted);
+				font-size: 0.82rem;
+				line-height: 1.35;
+				margin-top: 0.12rem;
+			}
+			.command-item em {
+				font-size: 0.68rem;
+				font-style: normal;
+				text-transform: uppercase;
+			}
+			.command-empty {
+				color: var(--premium-muted);
+				margin: 0.8rem 0 0;
+				text-align: center;
+			}
 			@keyframes panelEnter {
 				from {
 					opacity: 0;
@@ -716,6 +898,10 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 				.post-item,
 				.dashboard-card,
 				.project-card {
+					transition: none;
+				}
+				.command-trigger,
+				.command-item {
 					transition: none;
 				}
 			}
@@ -759,6 +945,12 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 					display: inline-block;
 					margin-top: 0.4em;
 				}
+				.command-shell {
+					padding: 0.85rem;
+				}
+				.command-list {
+					max-height: min(360px, 52vh);
+				}
 			}
 		</style>
 	</head>
@@ -771,6 +963,10 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 					<h1 id="space-title" class="profile-name">{profileName}</h1>
 					<p class="profile-description">{SITE_DESCRIPTION}</p>
 					<p class="code-line">~/blog $ write --learn --build --ship</p>
+					<button class="command-trigger focus-ring" type="button" data-command-trigger aria-haspopup="dialog">
+						<span>快速探索</span>
+						<kbd>⌘ K</kbd>
+					</button>
 					<dl class="profile-stats" aria-label="博客统计">
 						<div>
 							<dt>文章</dt>
@@ -1054,9 +1250,70 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 					</article>
 				</div>
 			</section>
+
+			<dialog class="command-dialog" data-command-dialog aria-labelledby="command-title">
+				<div class="command-shell">
+					<header class="command-header">
+						<div>
+							<p class="command-kicker">COMMAND CENTER</p>
+							<h2 id="command-title">快速探索</h2>
+						</div>
+						<button class="command-close focus-ring" type="button" data-command-close aria-label="关闭快速探索">
+							ESC
+						</button>
+					</header>
+					<label class="command-search-field">
+						<span class="tool-label">搜索</span>
+						<input
+							class="focus-ring"
+							type="search"
+							role="combobox"
+							aria-controls="command-list"
+							aria-autocomplete="list"
+							aria-expanded="true"
+							data-command-search
+							placeholder="搜索面板、分类或文章"
+							autocomplete="off"
+						/>
+					</label>
+					<ul class="command-list" id="command-list" data-command-list role="listbox" aria-label="探索结果">
+						{
+							commandItems.map((item, index) => (
+								<li>
+									<button
+										id={`command-item-${index}`}
+										class="command-item focus-ring"
+										type="button"
+										role="option"
+										aria-selected={index === 0 ? 'true' : 'false'}
+										data-command-item
+										data-command-kind={item.kind}
+										data-command-target={item.target}
+										data-command-href={item.href}
+										data-command-search={item.search}
+									>
+										<span>
+											<strong>{item.label}</strong>
+											<small>{item.description}</small>
+										</span>
+										<em>{item.kind}</em>
+									</button>
+								</li>
+							))
+						}
+					</ul>
+					<p class="command-empty" data-command-empty hidden>没有匹配结果，换个关键词试试。</p>
+				</div>
+			</dialog>
 		</main>
 		<Footer />
 		<script is:inline>
+			const commandTrigger = document.querySelector('[data-command-trigger]');
+			const commandDialog = document.querySelector('[data-command-dialog]');
+			const commandClose = document.querySelector('[data-command-close]');
+			const commandSearch = document.querySelector('[data-command-search]');
+			const commandEmpty = document.querySelector('[data-command-empty]');
+			const commandItems = Array.from(document.querySelectorAll('[data-command-item]'));
 			const tabs = Array.from(document.querySelectorAll('[data-panel-target]'));
 			const panels = Array.from(document.querySelectorAll('[data-panel]'));
 			const postSearch = document.querySelector('[data-post-search]');
@@ -1072,9 +1329,64 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 			const commentDraft = document.querySelector('[data-comment-draft]');
 			const commentPreview = document.querySelector('[data-comment-preview]');
 			const visitorStorageKey = 'hilavera-blog-visitor-state';
+			let activeCommandIndex = 0;
 
 			function normalizeText(value) {
 				return String(value || '').trim().toLowerCase();
+			}
+
+			function visibleCommandItems() {
+				return commandItems.filter((item) => !item.hidden);
+			}
+
+			function setActiveCommand(index) {
+				const visibleItems = visibleCommandItems();
+				if (!visibleItems.length) {
+					commandSearch?.removeAttribute('aria-activedescendant');
+					return;
+				}
+
+				activeCommandIndex = (index + visibleItems.length) % visibleItems.length;
+				visibleItems.forEach((item, itemIndex) => {
+					item.setAttribute('aria-selected', String(itemIndex === activeCommandIndex));
+				});
+				commandSearch?.setAttribute('aria-activedescendant', visibleItems[activeCommandIndex].id);
+				visibleItems[activeCommandIndex]?.scrollIntoView({ block: 'nearest' });
+			}
+
+			function filterCommandItems() {
+				const query = normalizeText(commandSearch?.value);
+				commandItems.forEach((item) => {
+					item.hidden = Boolean(query) && !normalizeText(item.dataset.commandSearch).includes(query);
+				});
+				if (commandEmpty) commandEmpty.hidden = visibleCommandItems().length !== 0;
+				setActiveCommand(0);
+			}
+
+			function openCommandCenter() {
+				if (!commandDialog || commandDialog.open) return;
+				commandDialog.showModal();
+				commandSearch?.focus();
+				filterCommandItems();
+			}
+
+			function closeCommandCenter() {
+				commandDialog?.close();
+				commandTrigger?.focus();
+			}
+
+			function runCommand(item) {
+				if (item.dataset.commandKind === 'panel') {
+					showPanel(item.dataset.commandTarget, { focusPanel: true });
+				} else if (item.dataset.commandKind === 'category') {
+					if (categoryFilter) categoryFilter.value = item.dataset.commandTarget || '';
+					showPanel('posts', { focusPanel: true });
+					filterPosts();
+				} else if (item.dataset.commandHref) {
+					window.location.assign(item.dataset.commandHref);
+					return;
+				}
+				closeCommandCenter();
 			}
 
 			function readVisitorState() {
@@ -1165,6 +1477,33 @@ const techStack = ['Astro', 'HTML', 'CSS', 'JavaScript', 'Markdown', 'Git', 'Git
 					filterEmpty.hidden = visibleCount !== 0;
 				}
 			}
+
+			commandTrigger?.addEventListener('click', openCommandCenter);
+			commandClose?.addEventListener('click', closeCommandCenter);
+			commandDialog?.addEventListener('cancel', (event) => {
+				event.preventDefault();
+				closeCommandCenter();
+			});
+			commandSearch?.addEventListener('input', filterCommandItems);
+			commandSearch?.addEventListener('keydown', (event) => {
+				if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+					event.preventDefault();
+					setActiveCommand(activeCommandIndex + (event.key === 'ArrowDown' ? 1 : -1));
+				}
+				if (event.key === 'Enter') {
+					event.preventDefault();
+					const selectedItem = visibleCommandItems()[activeCommandIndex];
+					if (selectedItem) runCommand(selectedItem);
+				}
+			});
+			commandItems.forEach((item) => item.addEventListener('click', () => runCommand(item)));
+			document.addEventListener('keydown', (event) => {
+				if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+					event.preventDefault();
+					openCommandCenter();
+				}
+				if (event.key === 'Escape' && commandDialog?.open) closeCommandCenter();
+			});
 
 			tabs.forEach((tab) => {
 				tab.addEventListener('click', () => showPanel(tab.dataset.panelTarget));
